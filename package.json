@@ -12,5 +12,17 @@
   },
   "dependencies": {
     "three": "^0.139.2"
-  }
+  },
+  "description": "El mejor brazo robot controlable de la historia xD",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xev023/RobotArmController.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xev023/RobotArmController/issues"
+  },
+  "homepage": "https://github.com/xev023/RobotArmController#readme"
 }
