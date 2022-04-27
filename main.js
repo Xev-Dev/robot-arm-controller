@@ -1,3 +1,5 @@
+
+import 'regenerator-runtime/runtime'
 import * as THREE from 'three'
 import { OrbitControls, MapControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
@@ -89,7 +91,7 @@ window.addEventListener('gc.analog.start', function(event) {
     //Preparamos un render
     var renderer = new THREE.WebGLRenderer({antialias:true});
     //Seteamos el tamaño del render que queramos
-    renderer.setSize(840, 680);
+    renderer.setSize(1140, 770);
     //Introducimos nuestro objeto render en el DOM 
     document.getElementById('world').appendChild(renderer.domElement);
     //Le indicamos que renderice la escena y camara creadas con anterioridad
@@ -180,12 +182,11 @@ window.addEventListener('gc.analog.start', function(event) {
                 robotParts_dom.forEach(removeHighlight);
                 //TODO: delete BoxHelper
                 removeBoxHelper();
-                robotActivePart = part.getAttribute("data")
+                window.robotActivePart = part.getAttribute("data")
                 console.log(part.getAttribute("data"));
                 part.classList.toggle("marked");
                 //TODO: add BoxHelper
                 addBoxHelper();
-
             }
           );
         });
@@ -193,7 +194,7 @@ window.addEventListener('gc.analog.start', function(event) {
     }
 
 function removeBoxHelper(){
-    if(robotActivePart){
+    if(window.robotActivePart){
         console.log("remove =>"+robotActivePart);
         window.robot.remove(window.boxHelper);
     }
@@ -201,9 +202,9 @@ function removeBoxHelper(){
 }
 
 function addBoxHelper(){
-    if(robotActivePart){
+    if(window.robotActivePart){
         console.log("add =>"+robotActivePart);
-        var boxHelper = new window.three.BoxHelper(window.robot_parts[robotActivePart] , 0x00ff00 );
+        var boxHelper = new window.three.BoxHelper(window.robot_parts[window.robotActivePart] , 0x00ff00 );
         boxHelper.matrixAutoUpdate=true;
         boxHelper.position.x=-10;
         boxHelper.position.z=-10;

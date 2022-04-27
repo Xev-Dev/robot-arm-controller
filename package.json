@@ -11,6 +11,7 @@
     "vite": "^2.9.5"
   },
   "dependencies": {
+    "regenerator-runtime": "^0.13.9",
     "three": "^0.139.2"
   },
   "description": "El mejor brazo robot controlable de la historia xD",
