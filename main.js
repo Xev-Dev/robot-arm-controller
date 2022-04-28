@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime'
 import * as THREE from 'three'
 import { OrbitControls, MapControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
+import { GUI } from 'dat.gui'
 console.log(await Controller.search())
 
 window.three = THREE;
@@ -222,9 +223,12 @@ function recursive_robot_print(object_group, componentsArray){
             var temp_componentsArray = [];
             // if(item.type=="Group"  ){
             if(item.type=="Group" && !item.name.includes("ur10")){
-                // console.log(item);
-                // console.log( item.type + " - [" +item.name+"]");
-                // console.log(componentsArray); 
+                if(item.name.includes("SubArm") || item.name === 'MainArm'){
+                    const gui = new GUI()
+                    const folder = gui.addFolder(item.name)
+                    item.name.includes("SubArm") && item.name !== 'SubArm5' ? folder.add(item.rotation, 'z', 0, Math.PI * 2) : folder.add(item.rotation, 'y', 0, Math.PI * 2)  
+                    folder.open()
+                }
                 componentsArray[item.name] = item;
                 temp_componentsArray = recursive_robot_print(item, componentsArray);
             }

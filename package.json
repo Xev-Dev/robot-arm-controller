@@ -8,9 +8,11 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/dat.gui": "^0.7.7",
     "vite": "^2.9.5"
   },
   "dependencies": {
+    "dat.gui": "^0.7.9",
     "regenerator-runtime": "^0.13.9",
     "three": "^0.139.2"
   },
