@@ -6,12 +6,7 @@ import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js'
 import { GUI } from 'dat.gui'
 console.log(await Controller.search())
 window.three = THREE
-window.robot_parts = []
 window.camera = null
-window.robot = null
-window.rotate_z = false
-window.rotate_y = false
-window.rotate_x = false
 let look_x = 0
 let look_y = 35
 let look_z = 0
@@ -38,9 +33,6 @@ window.addEventListener('gc.analog.start', function(event) {
 
 ////THREE JS SUPER FUNCTION
 (function () {
-    window.rotate_z= false 
-    window.rotate_y = false 
-    window.rotate_x = false
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     pl.position.set(30, 60, 40)
@@ -70,11 +62,9 @@ window.addEventListener('gc.analog.start', function(event) {
     //Introducimos nuestro objeto render en el DOM 
     document.getElementById('world').appendChild(renderer.domElement)
     //Le indicamos que renderice la escena y camara creadas con anterioridad
-    renderer.render(scene, camera)
     var controls = new MapControls(camera, renderer.domElement)
     controls.target.set(look_x, look_y, look_z)
-    controls.update()
-    // var controls = new THREE.OrbitControls(camera, renderer.domElement)
+
     //Creamos un loop con una funcion recursiva
     var loop = function () {
         requestAnimationFrame(loop)
@@ -84,9 +74,8 @@ window.addEventListener('gc.analog.start', function(event) {
     //Cargamos nuestro modelo 3d y disponemos de una función de callback con el resultado.
     var loader = new ColladaLoader()
     loader.load("./models/ur10_2.dae", function (result) {
-        window.robot = result.scene
         let componentsArray = []
-        componentsArray = getRobotItems(window.robot, componentsArray)
+        componentsArray = getRobotItems(result.scene, componentsArray)
         console.log(componentsArray)
         scene.add(componentsArray.ArmBase)
         scene.add(componentsArray.ArmBase2)
