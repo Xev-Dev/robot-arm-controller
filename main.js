@@ -21,8 +21,6 @@ window.addEventListener('gc.controller.found', function() {
 window.addEventListener('gc.button.press', function(event) {
     var button = event.detail
     console.log(button)
-    buttonPressed(event)
-
 }, false)
 
 // Funcion que detecta los joysticks
@@ -94,11 +92,11 @@ window.addEventListener('gc.analog.start', function(event) {
         pivot4.position.z-=6.5
         componentsArray.SubArm5.position.z+=6.5
         const gui = new GUI()
-        gui.add(componentsArray.ArmBase2.rotation, 'y',0, Math.PI*2).name('ArmBase2')
-        gui.add(pivot1.rotation, 'z',0, Math.PI*2).name('Armbase3')
-        gui.add(pivot2.rotation, 'z',0, Math.PI*2).name('Armbase4')
-        gui.add(pivot3.rotation, 'z',0, Math.PI*2).name('Armbase5')
-        gui.add(pivot4.rotation, 'y',0, Math.PI*2).name('SubArm5')
+        gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('ArmBase2')
+        gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase3')
+        gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase4')
+        gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase5')
+        gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('SubArm5')
         loop()
     })  
  }())
