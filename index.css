@@ -14,41 +14,45 @@ button{
   border-radius: 5px;
   background-color:#6d6d6d;
   font-size: 3rem;
-  font-family: 'Goldman', cursive;
   color:rgb(118,147,180);
   text-shadow: 1px 1px 2px black;
+  -o-transition: all 1s ease-out;
+  transition: all 1s ease-out; 
+  -webkit-transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+}
+button:hover{  
+    background-color:rgb(118,147,180);
+    color: #6d6d6d;
+    text-shadow: 1px 1px 2px black;
+}
+#menu, button{
+    font-family: 'Goldman', cursive;
 }
 #menu{
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 12rem;
+  justify-content: space-between;
   background-color: #333333;
-  font-family: 'Goldman', cursive;
-  padding-top: 3rem;
-}
-.wrapper > span{
   font-size: 6rem;
 }
-.word1{
+.title1{
   color: #7693b4;
 }
-.word2{
+.title2{
   color: #6d6d6d;
 }
 @media (max-width: 716px) {
-  .wrapper > span{
+  #menu{
   font-size: 4rem;
   }
 }
 @media (max-width: 465px) {
-  .wrapper > span{
-  font-size: 3rem;
+  #menu{
+    font-size: 3rem;
   }
   button{
     width: 20rem;
-  }
-  #menu{
-    gap: 7rem;
   }
 }

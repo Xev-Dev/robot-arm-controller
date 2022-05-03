@@ -10,13 +10,11 @@ window.camera = null
 let look_x = 0
 let look_y = 35
 let look_z = 0
-
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
     var controllerPS4 = Controller.getController(0)
     window.a = controllerPS4.settings.list()
 }, false)
-
 // Funcion que detecta los botones del mando (Cruzeta,gatillos,botones)
 window.addEventListener('gc.button.press', function(event) {
     var button = event.detail
@@ -44,7 +42,6 @@ window.addEventListener('gc.button.press', function(event) {
             break;
     }
 }, false)
-
 // Funcion que detecta los joysticks
 window.addEventListener('gc.analog.start', function(event) {
     var stick = event.detail
@@ -114,7 +111,6 @@ window.setWorld = function setWorld() {
     loader.load("./models/ur10_2.dae", function (result) {
         let componentsArray = []
         componentsArray = getRobotItems(result.scene, componentsArray)
-        console.log(componentsArray)
         scene.add(componentsArray.ArmBase)
         scene.add(componentsArray.ArmBase2)
         let pivot1 = setPivot(componentsArray.ArmBase2,componentsArray.ArmBase3)
@@ -138,7 +134,6 @@ window.setWorld = function setWorld() {
         window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase4')
         window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase5')
         window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('SubArm5')
-        
         loop()
     })  
 }
