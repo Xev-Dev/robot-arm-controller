@@ -22,7 +22,6 @@ window.addEventListener('gc.button.press', function(event) {
     var button = event.detail
     console.log(button)
     buttonPressed(event)
-
 }, false)
 
 // Funcion que detecta los joysticks
@@ -44,7 +43,7 @@ window.addEventListener('gc.analog.start', function(event) {
     scene.background = new THREE.Color('white')
     //Añadimos a la escena el punto de luz y el helper para verla
     scene.add(pl)
-    scene.add( pointLightHelper )
+    scene.add(pointLightHelper )
     //Creamos una camara
     var camera = new THREE.PerspectiveCamera(35, 840 / 680, .1, 500 )
     //Configuramos la camara
@@ -59,9 +58,10 @@ window.addEventListener('gc.analog.start', function(event) {
     var renderer = new THREE.WebGLRenderer({antialias:true})
     //Seteamos el tamaño del render que queramos
     renderer.setSize(1140, 770)
-    //Introducimos nuestro objeto render en el DOM 
+    //Introducimos nuestro objeto render en el DOM
+    
     document.getElementById('world').appendChild(renderer.domElement)
-    //Le indicamos que renderice la escena y camara creadas con anterioridad
+    //Configuramos los controles para poder movernos por el mundo
     var controls = new MapControls(camera, renderer.domElement)
     controls.target.set(look_x, look_y, look_z)
 
@@ -94,9 +94,10 @@ window.addEventListener('gc.analog.start', function(event) {
         pivot4.position.z-=6.5
         componentsArray.SubArm5.position.z+=6.5
         const gui = new GUI()
-        gui.add(componentsArray.ArmBase2.rotation, 'y',0, Math.PI*2).name('ArmBase2')
+        //-2.8, 2.8
+        window.ArmBase2 = gui.add(componentsArray.ArmBase2.rotation, 'y',0, Math.PI*2).name('ArmBase2')
         gui.add(pivot1.rotation, 'z',0, Math.PI*2).name('Armbase3')
-        gui.add(pivot2.rotation, 'z',0, Math.PI*2).name('Armbase4')
+        gui.add(pivot2.rotation, 'z',-2.8, 2.8).name('Armbase4')
         gui.add(pivot3.rotation, 'z',0, Math.PI*2).name('Armbase5')
         gui.add(pivot4.rotation, 'y',0, Math.PI*2).name('SubArm5')
         loop()
@@ -106,14 +107,14 @@ window.addEventListener('gc.analog.start', function(event) {
 function setPivot(item1,item2){
     //  PARA VER LOS EJES DE LOS PIVOTES
     // let axes = new THREE.AxisHelper(105) 
-    // pivot.add(axes)
     let pivot = new THREE.Object3D();
+    // pivot.add(axes)
     item1.add(pivot)
     pivot.add(item2)
     return pivot
 }
 //Funcion recursiva a la cual le pasamos el robot y a si misma. 
-//Devuelve una array con los distintos componentes de tipo grupo
+//Devuelve un objeto con objetos dentro de tipo grupo
 function getRobotItems(object_group, componentsArray){
         object_group.children.forEach(function (item){
             var temp_componentsArray = []
