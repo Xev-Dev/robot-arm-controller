@@ -21,10 +21,6 @@ window.addEventListener('gc.controller.found', function() {
 window.addEventListener('gc.button.press', function(event) {
     var button = event.detail
     console.log(button)
-<<<<<<< HEAD
-    buttonPressed(event)
-=======
->>>>>>> d3fe887bde562eeb687f4b96f1f0c7dfd3dd017a
 }, false)
 
 // Funcion que detecta los joysticks
