@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Goldman:wght@700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+} 
+html,body,#menu{
+  height: 100%;
+  width: 100%;
+}
+button{
+  height: 8rem;
+  width: 23rem;
+  border: 0;
+  border-radius: 5px;
+  background-color:#6d6d6d;
+  font-size: 3rem;
+  font-family: 'Goldman', cursive;
+  color:rgb(118,147,180);
+  text-shadow: 1px 1px 2px black;
+}
+#menu{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 12rem;
+  background-color: #333333;
+  font-family: 'Goldman', cursive;
+  padding-top: 3rem;
+}
+.wrapper > span{
+  font-size: 6rem;
+}
+.word1{
+  color: #7693b4;
+}
+.word2{
+  color: #6d6d6d;
+}
+@media (max-width: 716px) {
+  .wrapper > span{
+  font-size: 4rem;
+  }
+}
+@media (max-width: 465px) {
+  .wrapper > span{
+  font-size: 3rem;
+  }
+  button{
+    width: 20rem;
+  }
+  #menu{
+    gap: 7rem;
+  }
+}

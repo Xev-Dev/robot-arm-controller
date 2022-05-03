@@ -28,9 +28,9 @@ window.addEventListener('gc.analog.start', function(event) {
     var stick = event.detail
     console.log(stick)
 }, false)
-
 ////THREE JS SUPER FUNCTION
-(function () {
+window.setWorld = function setWorld() {
+    document.getElementById('menu').style.display="none"
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     pl.position.set(30, 60, 40)
@@ -63,7 +63,6 @@ window.addEventListener('gc.analog.start', function(event) {
     //Configuramos los controles para poder movernos por el mundo
     var controls = new MapControls(camera, renderer.domElement)
     controls.target.set(look_x, look_y, look_z)
-
     //Creamos un loop con una funcion recursiva
     var loop = function () {
         requestAnimationFrame(loop)
@@ -101,7 +100,7 @@ window.addEventListener('gc.analog.start', function(event) {
         gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('SubArm5')
         loop()
     })  
- }())
+}
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1,item2){
     //  PARA VER LOS EJES DE LOS PIVOTES
