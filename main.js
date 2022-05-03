@@ -21,12 +21,52 @@ window.addEventListener('gc.controller.found', function() {
 window.addEventListener('gc.button.press', function(event) {
     var button = event.detail
     console.log(button)
+    switch (button.name) {
+        case "LEFT_SHOULDER":
+            window.armbase3.setValue(window.armbase3.object._z+1)
+            break;
+        case "RIGHT_SHOULDER":
+            window.armbase3.setValue(window.armbase3.object._z-1)
+            break;
+        case "LEFT_SHOULDER_BOTTOM":
+            window.armbase4.setValue(window.armbase4.object._z+1)
+            break;
+        case "RIGHT_SHOULDER_BOTTOM":
+            window.armbase4.setValue(window.armbase4.object._z-1)
+            break;
+        case "DPAD_LEFT":
+            window.armbase5.setValue(window.armbase5.object._z+1)
+            break;
+        case "DPAD_RIGHT":
+            window.armbase5.setValue(window.armbase5.object._z-1)
+            break;
+        default:
+            break;
+    }
 }, false)
 
 // Funcion que detecta los joysticks
 window.addEventListener('gc.analog.start', function(event) {
     var stick = event.detail
     console.log(stick)
+    switch (stick.name) {
+        case "LEFT_ANALOG_STICK":
+            if (stick.position.x < 0) {
+                window.armbase2.setValue(window.armbase2.object._y+1) 
+            } else {
+                window.armbase2.setValue(window.armbase2.object._y-1)
+            } 
+            break;
+        case "RIGHT_ANALOG_STICK":
+            if (stick.position.x < 0) {
+                window.subarm5.setValue(window.subarm5.object._y+1) 
+            } else {
+                window.subarm5.setValue(window.subarm5.object._y-1)
+            } 
+            break;
+        default:
+            break;
+    }
 }, false)
 
 ////THREE JS SUPER FUNCTION
@@ -94,11 +134,12 @@ window.addEventListener('gc.analog.start', function(event) {
         //-2.8, 2.8
         componentsArray.SubArm5.position.z+=6.5
         const gui = new GUI()
-        gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('ArmBase2')
-        gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase3')
-        gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase4')
-        gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase5')
-        gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('SubArm5')
+        window.armbase2 = gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('ArmBase2');
+        window.armbase3 = gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase3')
+        window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase4')
+        window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase5')
+        window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('SubArm5')
+        
         loop()
     })  
  }())
