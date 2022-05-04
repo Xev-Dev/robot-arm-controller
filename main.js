@@ -10,13 +10,11 @@ window.camera = null
 let look_x = 0
 let look_y = 35
 let look_z = 0
-
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
     var controllerPS4 = Controller.getController(0)
     window.a = controllerPS4.settings.list()
 }, false)
-
 // Funcion que detecta los botones del mando (Cruzeta,gatillos,botones)
 window.addEventListener('gc.button.press', function(event) {
     var button = event.detail
@@ -44,7 +42,6 @@ window.addEventListener('gc.button.press', function(event) {
             break;
     }
 }, false)
-
 // Funcion que detecta los joysticks
 window.addEventListener('gc.analog.start', function(event) {
     var stick = event.detail
@@ -68,9 +65,9 @@ window.addEventListener('gc.analog.start', function(event) {
             break;
     }
 }, false)
-
 ////THREE JS SUPER FUNCTION
-(function () {
+window.setWorld = function setWorld() {
+    document.getElementById('menu').style.display="none"
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     pl.position.set(30, 60, 40)
@@ -103,7 +100,6 @@ window.addEventListener('gc.analog.start', function(event) {
     //Configuramos los controles para poder movernos por el mundo
     var controls = new MapControls(camera, renderer.domElement)
     controls.target.set(look_x, look_y, look_z)
-
     //Creamos un loop con una funcion recursiva
     var loop = function () {
         requestAnimationFrame(loop)
@@ -115,7 +111,6 @@ window.addEventListener('gc.analog.start', function(event) {
     loader.load("./models/ur10_2.dae", function (result) {
         let componentsArray = []
         componentsArray = getRobotItems(result.scene, componentsArray)
-        console.log(componentsArray)
         scene.add(componentsArray.ArmBase)
         scene.add(componentsArray.ArmBase2)
         let pivot1 = setPivot(componentsArray.ArmBase2,componentsArray.ArmBase3)
@@ -139,10 +134,9 @@ window.addEventListener('gc.analog.start', function(event) {
         window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase4')
         window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase5')
         window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('SubArm5')
-        
         loop()
     })  
- }())
+}
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1,item2){
     //  PARA VER LOS EJES DE LOS PIVOTES

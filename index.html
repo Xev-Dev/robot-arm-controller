@@ -2,22 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="index.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Robot Arm Controller</title>
+    <title>DPadRobot</title>
     <script src="./controller/Controller.min.js"></script>
     <script src="./controller/Controller.layouts.min.js"></script> 
-    <style>
-      *{
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+    <script type="module" src="main.js"></script>
   </head>
   <body>
-    <script type="module" src="/main.js"></script>
-    <div id="wrapper">
-      <div id="world"></div>
+    <div id="menu">
+      <div class="wrapper">
+        <span class="title1">DPad</span>
+        <span class="title2">Robot</span>
+      </div> 
+      <button onclick="setWorld()">Entrar</button>
+      <div class="empty"></div>
     </div>
+    <div id="world"></div>
   </body>
 </html>
