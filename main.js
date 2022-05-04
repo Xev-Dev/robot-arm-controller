@@ -12,53 +12,54 @@ let look_y = 35
 let look_z = 0
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
-    var controllerPS4 = Controller.getController(0)
-    window.a = controllerPS4.settings.list()
+    var controller = Controller.getController(0)
+    window.a = controller.settings.list()
+    console.log(controller.layoutInfo);
 }, false)
 // Funcion que detecta los botones del mando (Cruzeta,gatillos,botones)
-window.addEventListener('gc.button.press', function(event) {
+window.addEventListener('gc.button.hold', function(event) {
     var button = event.detail
     console.log(button)
     switch (button.name) {
         case "LEFT_SHOULDER":
-            window.armbase3.setValue(window.armbase3.object._z+0.1)
+            window.armbase3.setValue(window.armbase3.object._z+0.05)
             break;
         case "RIGHT_SHOULDER":
-            window.armbase3.setValue(window.armbase3.object._z-0.1)
+            window.armbase3.setValue(window.armbase3.object._z-0.05)
             break;
         case "LEFT_SHOULDER_BOTTOM":
-            window.armbase4.setValue(window.armbase4.object._z+0.1)
+            window.armbase4.setValue(window.armbase4.object._z+0.05)
             break;
         case "RIGHT_SHOULDER_BOTTOM":
-            window.armbase4.setValue(window.armbase4.object._z-0.1)
+            window.armbase4.setValue(window.armbase4.object._z-0.05)
             break;
         case "DPAD_LEFT":
-            window.armbase5.setValue(window.armbase5.object._z+0.1)
+            window.armbase5.setValue(window.armbase5.object._z+0.05)
             break;
         case "DPAD_RIGHT":
-            window.armbase5.setValue(window.armbase5.object._z-0.1)
+            window.armbase5.setValue(window.armbase5.object._z-0.05)
             break;
         default:
             break;
     }
 }, false)
 // Funcion que detecta los joysticks
-window.addEventListener('gc.analog.start', function(event) {
+window.addEventListener('gc.analog.hold', function(event) {
     var stick = event.detail
     console.log(stick)
     switch (stick.name) {
         case "LEFT_ANALOG_STICK":
             if (stick.position.x < 0) {
-                window.armbase2.setValue(window.armbase2.object._y+0.1) 
+                window.armbase2.setValue(window.armbase2.object._y+0.05) 
             } else {
-                window.armbase2.setValue(window.armbase2.object._y-0.1)
+                window.armbase2.setValue(window.armbase2.object._y-0.05)
             } 
             break;
         case "RIGHT_ANALOG_STICK":
             if (stick.position.x < 0) {
-                window.subarm5.setValue(window.subarm5.object._y+1) 
+                window.subarm5.setValue(window.subarm5.object._y+0.05) 
             } else {
-                window.subarm5.setValue(window.subarm5.object._y-1)
+                window.subarm5.setValue(window.subarm5.object._y-0.05)
             } 
             break;
         default:
@@ -68,6 +69,7 @@ window.addEventListener('gc.analog.start', function(event) {
 ////THREE JS SUPER FUNCTION
 window.setWorld = function setWorld() {
     document.getElementById('menu').style.display="none"
+    document.getElementById('controlls-container').style.display="block"
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     pl.position.set(30, 60, 40)
@@ -140,9 +142,9 @@ window.setWorld = function setWorld() {
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1,item2){
     //  PARA VER LOS EJES DE LOS PIVOTES
-    // let axes = new THREE.AxisHelper(105) 
+    //let axes = new THREE.AxisHelper(105) 
     let pivot = new THREE.Object3D();
-    // pivot.add(axes)
+    //pivot.add(axes)
     item1.add(pivot)
     pivot.add(item2)
     return pivot
