@@ -5,8 +5,6 @@ import { MapControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js'
 import { GUI } from 'dat.gui'
 console.log(await Controller.search())
-window.three = THREE
-window.camera = null
 let look_x = 0
 let look_y = 35
 let look_z = 0
@@ -76,7 +74,7 @@ window.setWorld = function setWorld() {
     const pointLightHelper = new THREE.PointLightHelper( pl, sphereSize, 0x000000 )
     //Creamos escena
     var scene = new THREE.Scene()
-    scene.background = new THREE.Color('white')
+    scene.background = new THREE.Color(0x7693b4)
     //Añadimos a la escena el punto de luz y el helper para verla
     scene.add(pl)
     scene.add(pointLightHelper )
@@ -89,13 +87,29 @@ window.setWorld = function setWorld() {
     camera.lookAt(look_x, look_y, look_z)
     //Añadimos la camara a la escena
     scene.add(camera)
-    window.camera = camera
+    //Añadimos un suelo y un rectangulo por debajo del brazo 
+    //robótico para recrear una escena con algo de realidad
+    var geoFloor = new THREE.PlaneBufferGeometry(100, 100, 30, 30); 
+    var geoCube = new THREE.BoxGeometry( 20, 100, 8 );
+    var matFloor = new THREE.MeshBasicMaterial({ color: 0x535654, side: THREE.DoubleSide });
+    var matCube = new THREE.MeshBasicMaterial({ color: 0x333333, side: THREE.DoubleSide });
+    var cube = new THREE.Mesh(geoCube,matCube); 
+    var floor = new THREE.Mesh(geoFloor,matFloor)
+    //Rotaciones de los elementos
+    floor.rotateX( - Math.PI / 2);
+    cube.rotateX( - Math.PI / 2);
+    cube.rotateY( - Math.PI / 2);
+    //Posicionamiento
+    floor.position.y -= 20;
+    cube.position.y -= 10;
+    //Finalmente añadimos
+    scene.add(floor);
+    scene.add(cube)
     //Preparamos un render
     var renderer = new THREE.WebGLRenderer({antialias:true})
     //Seteamos el tamaño del render que queramos
     renderer.setSize(1140, 770)
     //Introducimos nuestro objeto render en el DOM
-    
     document.getElementById('world').appendChild(renderer.domElement)
     //Configuramos los controles para poder movernos por el mundo
     var controls = new MapControls(camera, renderer.domElement)
