@@ -23,22 +23,22 @@ window.addEventListener('gc.button.press', function(event) {
     console.log(button)
     switch (button.name) {
         case "LEFT_SHOULDER":
-            window.armbase3.setValue(window.armbase3.object._z+1)
+            window.armbase3.setValue(window.armbase3.object._z+0.1)
             break;
         case "RIGHT_SHOULDER":
-            window.armbase3.setValue(window.armbase3.object._z-1)
+            window.armbase3.setValue(window.armbase3.object._z-0.1)
             break;
         case "LEFT_SHOULDER_BOTTOM":
-            window.armbase4.setValue(window.armbase4.object._z+1)
+            window.armbase4.setValue(window.armbase4.object._z+0.1)
             break;
         case "RIGHT_SHOULDER_BOTTOM":
-            window.armbase4.setValue(window.armbase4.object._z-1)
+            window.armbase4.setValue(window.armbase4.object._z-0.1)
             break;
         case "DPAD_LEFT":
-            window.armbase5.setValue(window.armbase5.object._z+1)
+            window.armbase5.setValue(window.armbase5.object._z+0.1)
             break;
         case "DPAD_RIGHT":
-            window.armbase5.setValue(window.armbase5.object._z-1)
+            window.armbase5.setValue(window.armbase5.object._z-0.1)
             break;
         default:
             break;
@@ -52,9 +52,9 @@ window.addEventListener('gc.analog.start', function(event) {
     switch (stick.name) {
         case "LEFT_ANALOG_STICK":
             if (stick.position.x < 0) {
-                window.armbase2.setValue(window.armbase2.object._y+1) 
+                window.armbase2.setValue(window.armbase2.object._y+0.1) 
             } else {
-                window.armbase2.setValue(window.armbase2.object._y-1)
+                window.armbase2.setValue(window.armbase2.object._y-0.1)
             } 
             break;
         case "RIGHT_ANALOG_STICK":
