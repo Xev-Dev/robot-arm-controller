@@ -18,6 +18,7 @@ window.addEventListener('gc.controller.found', function() {
 window.addEventListener('gc.button.hold', function(event) {
     var button = event.detail
     console.log(button)
+    //El switch coge el boton que estas tocando y asigna un valor a un componente segun el boton pulsado
     switch (button.name) {
         case "LEFT_SHOULDER":
             window.armbase3.setValue(window.armbase3.object._z+0.05)
@@ -45,19 +46,20 @@ window.addEventListener('gc.button.hold', function(event) {
 window.addEventListener('gc.analog.hold', function(event) {
     var stick = event.detail
     console.log(stick)
+    //El switch coge el boton que estas tocando y asigna un valor a un componente segun el boton pulsado
     switch (stick.name) {
         case "LEFT_ANALOG_STICK":
             if (stick.position.x < 0) {
-                window.armbase2.setValue(window.armbase2.object._y+0.05) 
+                window.armbase2.setValue(window.armbase2.object._y+(stick.position.x*-1)*0.2) 
             } else {
-                window.armbase2.setValue(window.armbase2.object._y-0.05)
+                window.armbase2.setValue(window.armbase2.object._y-(stick.position.x)*0.2)
             } 
             break;
         case "RIGHT_ANALOG_STICK":
             if (stick.position.x < 0) {
-                window.subarm5.setValue(window.subarm5.object._y+0.05) 
+                window.subarm5.setValue(window.subarm5.object._y+(stick.position.x*-1)*0.2) 
             } else {
-                window.subarm5.setValue(window.subarm5.object._y-0.05)
+                window.subarm5.setValue(window.subarm5.object._y-(stick.position.x)*0.2)
             } 
             break;
         default:
@@ -91,7 +93,7 @@ window.setWorld = function setWorld() {
     //robótico para recrear una escena con algo de realidad
     var geoFloor = new THREE.PlaneBufferGeometry(100, 100, 30, 30); 
     var geoCube = new THREE.BoxGeometry( 20, 100, 8 );
-    var matFloor = new THREE.MeshBasicMaterial({ color: 0x535654, side: THREE.DoubleSide });
+    var matFloor = new THREE.MeshBasicMaterial({ color: 0xadb3af, side: THREE.DoubleSide });
     var matCube = new THREE.MeshBasicMaterial({ color: 0x333333, side: THREE.DoubleSide });
     var cube = new THREE.Mesh(geoCube,matCube); 
     var floor = new THREE.Mesh(geoFloor,matFloor)
@@ -148,12 +150,13 @@ window.setWorld = function setWorld() {
         pivot4.position.z-=6.5
         //-2.8, 2.8
         componentsArray.SubArm5.position.z+=6.5
+        //Aqui se añaden los elementos al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
         const gui = new GUI()
-        window.armbase2 = gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('ArmBase2');
-        window.armbase3 = gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase3')
-        window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase4')
-        window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase5')
-        window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('SubArm5')
+        window.armbase2 = gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1), (Math.PI*2)).name('ArmBase2');
+        window.armbase3 = gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2+0.5, (Math.PI*2)/2-0.5).name('Armbase3')
+        window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2+0.5, (Math.PI*2)/2-0.5).name('Armbase4')
+        window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2+0.5, (Math.PI*2)-0.5).name('Armbase5')
+        window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2+0.5, (Math.PI*2)-0.5).name('SubArm5')
         loop()
     })  
 }
