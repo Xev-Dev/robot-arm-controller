@@ -100,7 +100,7 @@ window.setWorld = function setWorld() {
     //robótico para recrear una escena con algo de realidad
     var geoFloor = new THREE.PlaneBufferGeometry(100, 100, 30, 30); 
     var geoCube = new THREE.BoxGeometry( 20, 100, 8 );
-    var matFloor = new THREE.MeshBasicMaterial({ color: 0x535654, side: THREE.DoubleSide });
+    var matFloor = new THREE.MeshBasicMaterial({ color: 0xadb3af, side: THREE.DoubleSide });
     var matCube = new THREE.MeshBasicMaterial({ color: 0x333333, side: THREE.DoubleSide });
     var cube = new THREE.Mesh(geoCube,matCube); 
     var floor = new THREE.Mesh(geoFloor,matFloor)
