@@ -64,15 +64,8 @@ window.addEventListener('gc.analog.hold', function(event) {
             break;
     }
 }, false)
-//Listener para el resize del mundo renderizado
-window.addEventListener( 'resize', onWindowResize, false );
-function onWindowResize(){
-    window.render.setSize( window.innerWidth, window.innerHeight );
-}
 ////THREE JS SUPER FUNCTION
 window.setWorld = function setWorld() {
-    document.getElementById('menu').style.display="none"
-    document.getElementById('controlls-container').style.display="block"
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     pl.position.set(30, 60, 40)
@@ -115,8 +108,13 @@ window.setWorld = function setWorld() {
     //Preparamos un render
     var renderer = new THREE.WebGLRenderer({antialias:true})
     window.render = renderer
-    //Seteamos el tamaño del render que queramos
-    renderer.setSize(window.innerWidth, window.innerHeight)
+    //Handle initial window size 
+    document.getElementById('menu').style.display="none"
+    onWindowSize()
+    //Set mobile joystick
+    setJoystick()
+    //Listener para controlar el resize
+    window.addEventListener('resize', onWindowSize,false);
     //Introducimos nuestro objeto render en el DOM
     document.getElementById('world').appendChild(renderer.domElement)
     //Configuramos los controles para poder movernos por el mundo
@@ -158,6 +156,37 @@ window.setWorld = function setWorld() {
         window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('SubArm5')
         loop()
     })  
+}
+function onWindowSize(){
+    window.render.setSize( window.innerWidth, window.innerHeight );
+    if(window.innerWidth < 926){
+        document.getElementById('controlls-container').style.display="none"
+        document.getElementById('joyDiv').style.display="block"
+    }else{
+        document.getElementById('joyDiv').style.display="none"
+        document.getElementById('controlls-container').style.display="block"
+    }
+}
+//Funcion para setear los controles en el móvil
+function setJoystick(){
+    var joy = new JoyStick('joyDiv',{
+            // The ID of canvas element
+            title: 'joystick',
+            // width/height
+            width: undefined,
+            height: undefined,
+            internalFillColor: '#00AA00',
+            // Border width of Stick
+            internalLineWidth: 2,
+            // Border color of Stick
+            internalStrokeColor: '#003300',
+            // External reference circonference width
+            externalLineWidth: 2,
+            //External reference circonference color
+            externalStrokeColor: '#008000',
+            // Sets the behavior of the stick
+            autoReturnToCenter: true
+    })
 }
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1,item2){
