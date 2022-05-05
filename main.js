@@ -64,6 +64,11 @@ window.addEventListener('gc.analog.hold', function(event) {
             break;
     }
 }, false)
+//Listener para el resize del mundo renderizado
+window.addEventListener( 'resize', onWindowResize, false );
+function onWindowResize(){
+    window.render.setSize( window.innerWidth, window.innerHeight );
+}
 ////THREE JS SUPER FUNCTION
 window.setWorld = function setWorld() {
     document.getElementById('menu').style.display="none"
@@ -109,8 +114,9 @@ window.setWorld = function setWorld() {
     scene.add(cube)
     //Preparamos un render
     var renderer = new THREE.WebGLRenderer({antialias:true})
+    window.render = renderer
     //Seteamos el tamaño del render que queramos
-    renderer.setSize(1140, 770)
+    renderer.setSize(window.innerWidth, window.innerHeight)
     //Introducimos nuestro objeto render en el DOM
     document.getElementById('world').appendChild(renderer.domElement)
     //Configuramos los controles para poder movernos por el mundo
