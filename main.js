@@ -146,10 +146,10 @@ window.setWorld = function setWorld() {
         componentsArray.SubArm5.position.z+=6.5
         const gui = new GUI()
         window.armbase2 = gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('ArmBase2');
-        window.armbase3 = gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase3')
-        window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase4')
-        window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('Armbase5')
-        window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2, (Math.PI*2)/2).name('SubArm5')
+        window.armbase3 = gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2+0.5, (Math.PI*2)/2-0.5).name('Armbase3')
+        window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2+0.5, (Math.PI*2)/2-0.5).name('Armbase4')
+        window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2+0.5, (Math.PI*2)/2-0.5).name('Armbase5')
+        window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2+0.5, (Math.PI*2)/2-0.5).name('SubArm5')
         loop()
     })  
 }
