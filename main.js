@@ -8,6 +8,7 @@ console.log(await Controller.search())
 let look_x = 0
 let look_y = 35
 let look_z = 0
+window.joystick = undefined
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
     var controller = Controller.getController(0)
@@ -71,7 +72,7 @@ window.setWorld = function setWorld() {
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     pl.position.set(30, 60, 40)
-    const sphereSize = 1
+    const sphereSize = 1    
     //Creamos un helper para saber donde se encuentra el punto de luz 
     const pointLightHelper = new THREE.PointLightHelper( pl, sphereSize, 0x000000 )
     //Creamos escena
@@ -79,7 +80,7 @@ window.setWorld = function setWorld() {
     scene.background = new THREE.Color(0x7693b4)
     //Añadimos a la escena el punto de luz y el helper para verla
     scene.add(pl)
-    scene.add(pointLightHelper )
+    scene.add(pointLightHelper)
     //Creamos una camara
     var camera = new THREE.PerspectiveCamera(35, 840 / 680, .1, 500 )
     //Configuramos la camara
@@ -113,8 +114,6 @@ window.setWorld = function setWorld() {
     //Handle initial window size 
     document.getElementById('menu').style.display="none"
     onWindowSize()
-    //Set mobile joystick
-    setJoystick()
     //Listener para controlar el resize
     window.addEventListener('resize', onWindowSize,false);
     //Introducimos nuestro objeto render en el DOM
@@ -165,6 +164,10 @@ function onWindowSize(){
     if(window.innerWidth < 926){
         document.getElementById('controlls-container').style.display="none"
         document.getElementById('joyDiv').style.display="block"
+        if(!window.joystick){
+             //Set mobile joystick if not exists setJoystick
+            setJoystick()
+        }
     }else{
         document.getElementById('joyDiv').style.display="none"
         document.getElementById('controlls-container').style.display="block"
@@ -172,7 +175,7 @@ function onWindowSize(){
 }
 //Funcion para setear los controles en el móvil
 function setJoystick(){
-    var joy = new JoyStick('joyDiv',{
+    window.joystick = new JoyStick('joyDiv',{
             // The ID of canvas element
             title: 'joystick',
             // width/height
