@@ -74,3 +74,13 @@ button:hover{
   align-items: center; 
   font-family: 'Goldman', cursive;
 }
+
+#joyDiv{
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  width: 8rem;
+  height: 8rem;
+  display: none;
+  border-radius: 3px;
+}
