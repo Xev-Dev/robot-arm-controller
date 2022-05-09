@@ -45,6 +45,7 @@ window.addEventListener('gc.button.hold', function(event) {
             break;
     }
 }, false)
+
 // Funcion que detecta los joysticks
 window.addEventListener('gc.analog.hold', function(event) {
     var stick = event.detail
@@ -151,13 +152,13 @@ window.setWorld = function setWorld() {
         pivot4.position.z-=6.5
         //-2.8, 2.8
         componentsArray.SubArm5.position.z+=6.5
-        //Aqui se añaden los elementos al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
+        //Aqui se añaden las partes del brazo al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
         const gui = new GUI()
         window.armbase2 = gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1), (Math.PI*2)).name('ArmBase2');
-        window.armbase3 = gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2+0.5, (Math.PI*2)/2-0.5).name('Armbase3')
-        window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2+0.5, (Math.PI*2)/2-0.5).name('Armbase4')
-        window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2+0.5, (Math.PI*2)-0.5).name('Armbase5')
-        window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2+0.5, (Math.PI*2)-0.5).name('SubArm5')
+        window.armbase3 = gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)/2-0.3).name('Armbase3')
+        window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)/2-0.3).name('Armbase4')
+        window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)-0.3).name('Armbase5')
+        window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2+0.3, (Math.PI*2)-0.3).name('SubArm5')
         loop()
     })  
 }
