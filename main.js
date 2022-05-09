@@ -10,6 +10,13 @@ let look_x = 0
 let look_y = 35
 let look_z = 0
 window.joystick = undefined
+window.guis = {
+    'armbase2':undefined,
+    'armbase3':undefined,
+    'armbase4':undefined,
+    'armbase5':undefined,
+    'subarm5':undefined
+}
 const socket = io("http://localhost:3300")
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
@@ -24,22 +31,22 @@ window.addEventListener('gc.button.hold', function(event) {
     //El switch coge el boton que estas tocando y asigna un valor a un componente segun el boton pulsado
     switch (button.name) {
         case "LEFT_SHOULDER":
-            window.armbase3.setValue(window.armbase3.object._z+0.05)
+            window.guis.armbase3.setValue(window.guis.armbase3.object._z+0.05)
             break
         case "RIGHT_SHOULDER":
-            window.armbase3.setValue(window.armbase3.object._z-0.05)
+            window.guis.armbase3.setValue(window.guis.armbase3.object._z-0.05)
             break
         case "LEFT_SHOULDER_BOTTOM":
-            window.armbase4.setValue(window.armbase4.object._z+0.05)
+            window.guis.armbase4.setValue(window.guis.armbase4.object._z+0.05)
             break
         case "RIGHT_SHOULDER_BOTTOM":
-            window.armbase4.setValue(window.armbase4.object._z-0.05)
+            window.guis.armbase4.setValue(window.guis.armbase4.object._z-0.05)
             break
         case "DPAD_LEFT":
-            window.armbase5.setValue(window.armbase5.object._z+0.05)
+            window.guis.armbase5.setValue(window.guis.armbase5.object._z+0.05)
             break
         case "DPAD_RIGHT":
-            window.armbase5.setValue(window.armbase5.object._z-0.05)
+            window.guis.armbase5.setValue(window.guis.armbase5.object._z-0.05)
             break
         default:
             break
@@ -54,16 +61,16 @@ window.addEventListener('gc.analog.hold', function(event) {
     switch (stick.name) {
         case "LEFT_ANALOG_STICK":
             if (stick.position.x < 0) {
-                window.armbase2.setValue(window.armbase2.object._y+(stick.position.x*-1)*0.2) 
+                window.guis.armbase2.setValue(window.guis.armbase2.object._y+(stick.position.x*-1)*0.2) 
             } else {
-                window.armbase2.setValue(window.armbase2.object._y-(stick.position.x)*0.2)
+                window.guis.armbase2.setValue(window.guis.armbase2.object._y-(stick.position.x)*0.2)
             } 
             break
         case "RIGHT_ANALOG_STICK":
             if (stick.position.x < 0) {
-                window.subarm5.setValue(window.subarm5.object._y+(stick.position.x*-1)*0.2) 
+                window.guis.subarm5.setValue(window.guis.subarm5.object._y+(stick.position.x*-1)*0.2) 
             } else {
-                window.subarm5.setValue(window.subarm5.object._y-(stick.position.x)*0.2)
+                window.guis.subarm5.setValue(window.guis.subarm5.object._y-(stick.position.x)*0.2)
             } 
             break
         default:
@@ -154,11 +161,11 @@ window.setWorld = function setWorld() {
         componentsArray.SubArm5.position.z+=6.5
         //Aqui se añaden las partes del brazo al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
         const gui = new GUI()
-        window.armbase2 = gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1), (Math.PI*2)).name('ArmBase2')
-        window.armbase3 = gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)/2-0.3).name('Armbase3')
-        window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)/2-0.3).name('Armbase4')
-        window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)-0.3).name('Armbase5')
-        window.subarm5 = gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2+0.3, (Math.PI*2)-0.3).name('SubArm5')
+        window.guis.armbase2=gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1), (Math.PI*2)).name('ArmBase2')
+        window.guis.armbase3=gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)/2-0.3).name('Armbase3')
+        window.guis.armbase4=gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)/2-0.3).name('Armbase4')
+        window.guis.armbase5=gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)-0.3).name('Armbase5')
+        window.guis.subarm5=gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2+0.3, (Math.PI*2)-0.3).name('SubArm5')
         loop()
     })  
 }
