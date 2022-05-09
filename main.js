@@ -15,6 +15,7 @@ window.joystick = undefined
 //Creamos una variable window con la array de los guis
 window.guis = guis
 const socket = io("http://localhost:3300")
+
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
     var controller = Controller.getController(0)
@@ -134,6 +135,7 @@ window.setWorld = function setWorld() {
         renderer.render(scene, camera)
         controls.update()
     }
+    //console.log(window.joystick.GetPosX());
     //Cargamos nuestro modelo 3d y disponemos de una función de callback con el resultado.
     var loader = new ColladaLoader()
     loader.load("./models/ur10_2.dae", function (result) {
@@ -197,6 +199,7 @@ function onWindowSize(){
         document.getElementById('mobileArrows').style.display="none"    
     }
 }
+
 //Funcion para setear los controles en el móvil
 function setJoystick(){
     window.joystick = new JoyStick('joyDiv',{
@@ -205,18 +208,26 @@ function setJoystick(){
             // width/height
             width: undefined,
             height: undefined,
-            internalFillColor: '#00AA00',
+            internalFillColor: '#000000',
             // Border width of Stick
             internalLineWidth: 2,
             // Border color of Stick
-            internalStrokeColor: '#003300',
+            internalStrokeColor: '#000000',
             // External reference circonference width
             externalLineWidth: 2,
             //External reference circonference color
-            externalStrokeColor: '#008000',
+            externalStrokeColor: '#000000',
             // Sets the behavior of the stick
             autoReturnToCenter: true
-    })
+
+    },function(stickData){
+        if (stickData.xPosition < 64) {
+            window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.05);
+        }else {
+            window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.05);
+        }
+    });
+    //console.log(window.joystick.GetX(),window.joystick.GetY());
 }
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1,item2){
