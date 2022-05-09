@@ -4,18 +4,18 @@ import * as THREE from 'three'
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js'
 import { GUI } from 'dat.gui'
-import { io } from "socket.io-client";
+import { io } from "socket.io-client"
 console.log(await Controller.search())
 let look_x = 0
 let look_y = 35
 let look_z = 0
 window.joystick = undefined
-const socket = io("http://localhost:3300");
+const socket = io("http://localhost:3300")
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
     var controller = Controller.getController(0)
     window.a = controller.settings.list()
-    console.log(controller.layoutInfo);
+    console.log(controller.layoutInfo)
 }, false)
 // Funcion que detecta los botones del mando (Cruzeta,gatillos,botones)
 window.addEventListener('gc.button.hold', function(event) {
@@ -25,24 +25,24 @@ window.addEventListener('gc.button.hold', function(event) {
     switch (button.name) {
         case "LEFT_SHOULDER":
             window.armbase3.setValue(window.armbase3.object._z+0.05)
-            break;
+            break
         case "RIGHT_SHOULDER":
             window.armbase3.setValue(window.armbase3.object._z-0.05)
-            break;
+            break
         case "LEFT_SHOULDER_BOTTOM":
             window.armbase4.setValue(window.armbase4.object._z+0.05)
-            break;
+            break
         case "RIGHT_SHOULDER_BOTTOM":
             window.armbase4.setValue(window.armbase4.object._z-0.05)
-            break;
+            break
         case "DPAD_LEFT":
             window.armbase5.setValue(window.armbase5.object._z+0.05)
-            break;
+            break
         case "DPAD_RIGHT":
             window.armbase5.setValue(window.armbase5.object._z-0.05)
-            break;
+            break
         default:
-            break;
+            break
     }
 }, false)
 
@@ -58,16 +58,16 @@ window.addEventListener('gc.analog.hold', function(event) {
             } else {
                 window.armbase2.setValue(window.armbase2.object._y-(stick.position.x)*0.2)
             } 
-            break;
+            break
         case "RIGHT_ANALOG_STICK":
             if (stick.position.x < 0) {
                 window.subarm5.setValue(window.subarm5.object._y+(stick.position.x*-1)*0.2) 
             } else {
                 window.subarm5.setValue(window.subarm5.object._y-(stick.position.x)*0.2)
             } 
-            break;
+            break
         default:
-            break;
+            break
     }
 }, false)
 ////THREE JS SUPER FUNCTION
@@ -95,21 +95,21 @@ window.setWorld = function setWorld() {
     scene.add(camera)
     //Añadimos un suelo y un rectangulo por debajo del brazo 
     //robótico para recrear una escena con algo de realidad
-    var geoFloor = new THREE.PlaneBufferGeometry(100, 100, 30, 30); 
-    var geoCube = new THREE.BoxGeometry( 20, 100, 8 );
-    var matFloor = new THREE.MeshBasicMaterial({ color: 0xadb3af, side: THREE.DoubleSide });
-    var matCube = new THREE.MeshBasicMaterial({ color: 0x333333, side: THREE.DoubleSide });
-    var cube = new THREE.Mesh(geoCube,matCube); 
+    var geoFloor = new THREE.PlaneBufferGeometry(100, 100, 30, 30) 
+    var geoCube = new THREE.BoxGeometry( 20, 100, 8 )
+    var matFloor = new THREE.MeshBasicMaterial({ color: 0xadb3af, side: THREE.DoubleSide })
+    var matCube = new THREE.MeshBasicMaterial({ color: 0x333333, side: THREE.DoubleSide })
+    var cube = new THREE.Mesh(geoCube,matCube) 
     var floor = new THREE.Mesh(geoFloor,matFloor)
     //Rotaciones de los elementos
-    floor.rotateX( - Math.PI / 2);
-    cube.rotateX( - Math.PI / 2);
-    cube.rotateY( - Math.PI / 2);
+    floor.rotateX( - Math.PI / 2)
+    cube.rotateX( - Math.PI / 2)
+    cube.rotateY( - Math.PI / 2)
     //Posicionamiento
-    floor.position.y -= 20;
-    cube.position.y -= 10;
+    floor.position.y -= 20
+    cube.position.y -= 10
     //Finalmente añadimos
-    scene.add(floor);
+    scene.add(floor)
     scene.add(cube)
     //Preparamos un render
     var renderer = new THREE.WebGLRenderer({antialias:true})
@@ -118,7 +118,7 @@ window.setWorld = function setWorld() {
     document.getElementById('menu').style.display="none"
     onWindowSize()
     //Listener para controlar el resize
-    window.addEventListener('resize', onWindowSize,false);
+    window.addEventListener('resize', onWindowSize,false)
     //Introducimos nuestro objeto render en el DOM
     document.getElementById('world').appendChild(renderer.domElement)
     //Configuramos los controles para poder movernos por el mundo
@@ -154,7 +154,7 @@ window.setWorld = function setWorld() {
         componentsArray.SubArm5.position.z+=6.5
         //Aqui se añaden las partes del brazo al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
         const gui = new GUI()
-        window.armbase2 = gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1), (Math.PI*2)).name('ArmBase2');
+        window.armbase2 = gui.add(componentsArray.ArmBase2.rotation, 'y',(Math.PI*2*-1), (Math.PI*2)).name('ArmBase2')
         window.armbase3 = gui.add(pivot1.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)/2-0.3).name('Armbase3')
         window.armbase4 = gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)/2-0.3).name('Armbase4')
         window.armbase5 = gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)-0.3).name('Armbase5')
@@ -163,17 +163,19 @@ window.setWorld = function setWorld() {
     })  
 }
 function onWindowSize(){
-    window.render.setSize( window.innerWidth, window.innerHeight );
+    window.render.setSize( window.innerWidth, window.innerHeight )
     if(window.innerWidth < 926){
         document.getElementById('controlls-container').style.display="none"
         document.getElementById('joyDiv').style.display="block"
+        document.getElementById('mobileArrows').style.display="flex"
         if(!window.joystick){
              //Set mobile joystick if not exists window.joystick
             setJoystick()
         }
     }else{
-        document.getElementById('joyDiv').style.display="none"
         document.getElementById('controlls-container').style.display="block"
+        document.getElementById('joyDiv').style.display="none"
+        document.getElementById('mobileArrows').style.display="none"    
     }
 }
 //Funcion para setear los controles en el móvil
@@ -201,7 +203,7 @@ function setJoystick(){
 function setPivot(item1,item2){
     //  PARA VER LOS EJES DE LOS PIVOTES
     //let axes = new THREE.AxisHelper(105) 
-    let pivot = new THREE.Object3D();
+    let pivot = new THREE.Object3D()
     //pivot.add(axes)
     item1.add(pivot)
     pivot.add(item2)
