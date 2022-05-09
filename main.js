@@ -176,6 +176,7 @@ function onWindowSize(){
         document.getElementById('controlls-container').style.display="block"
     }
 }
+
 //Funcion para setear los controles en el móvil
 function setJoystick(){
     window.joystick = new JoyStick('joyDiv',{
@@ -184,18 +185,19 @@ function setJoystick(){
             // width/height
             width: undefined,
             height: undefined,
-            internalFillColor: '#00AA00',
+            internalFillColor: '#000000',
             // Border width of Stick
             internalLineWidth: 2,
             // Border color of Stick
-            internalStrokeColor: '#003300',
+            internalStrokeColor: '#000000',
             // External reference circonference width
             externalLineWidth: 2,
             //External reference circonference color
-            externalStrokeColor: '#008000',
+            externalStrokeColor: '#000000',
             // Sets the behavior of the stick
-            autoReturnToCenter: true
+            autoReturnToCenter: false
     })
+    console.log(window.joystick.GetX(),window.joystick.GetY());
 }
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1,item2){

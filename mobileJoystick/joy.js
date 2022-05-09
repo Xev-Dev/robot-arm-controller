@@ -186,6 +186,12 @@ var JoyStick = (function(container, parameters, callback)
         {
             movedX = event.targetTouches[0].pageX;
             movedY = event.targetTouches[0].pageY;
+            console.log(movedX, movedY);
+            if (movedX < 100) {
+                window.armbase2.setValue(window.armbase2.object._y+(movedX)*0.02);
+            } else {
+                window.armbase2.setValue(window.armbase2.object._y-(movedX)*0.02);
+            }
             // Manage offset
             if(canvas.offsetParent.tagName.toUpperCase() === "BODY")
             {
