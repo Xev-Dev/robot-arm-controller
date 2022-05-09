@@ -4,11 +4,13 @@ import * as THREE from 'three'
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js'
 import { GUI } from 'dat.gui'
+import { io } from "socket.io-client";
 console.log(await Controller.search())
 let look_x = 0
 let look_y = 35
 let look_z = 0
 window.joystick = undefined
+const socket = io("http://localhost:3300");
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
     var controller = Controller.getController(0)
@@ -165,7 +167,7 @@ function onWindowSize(){
         document.getElementById('controlls-container').style.display="none"
         document.getElementById('joyDiv').style.display="block"
         if(!window.joystick){
-             //Set mobile joystick if not exists setJoystick
+             //Set mobile joystick if not exists window.joystick
             setJoystick()
         }
     }else{

@@ -14,6 +14,7 @@
   "dependencies": {
     "dat.gui": "^0.7.9",
     "regenerator-runtime": "^0.13.9",
+    "socket.io-client": "^4.5.0",
     "three": "^0.139.2"
   },
   "description": "El mejor brazo robot controlable de la historia xD",

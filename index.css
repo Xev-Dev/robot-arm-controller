@@ -37,17 +37,21 @@ button:hover{
   background-color: #333333;
   font-size: 6rem;
 }
+
 .title1{
   color: #7693b4;
 }
+
 .title2{
   color: #6d6d6d;
 }
+
 @media (max-width: 716px) {
   #menu{
   font-size: 4rem;
   }
 }
+
 @media (max-width: 465px) {
   #menu{
     font-size: 3rem;
@@ -56,6 +60,7 @@ button:hover{
     width: 20rem;
   }
 }
+
 #controlls-container {
   display: none;
   position: fixed;
