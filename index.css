@@ -37,17 +37,21 @@ button:hover{
   background-color: #333333;
   font-size: 6rem;
 }
+
 .title1{
   color: #7693b4;
 }
+
 .title2{
   color: #6d6d6d;
 }
+
 @media (max-width: 716px) {
   #menu{
   font-size: 4rem;
   }
 }
+
 @media (max-width: 465px) {
   #menu{
     font-size: 3rem;
@@ -56,6 +60,7 @@ button:hover{
     width: 20rem;
   }
 }
+
 #controlls-container {
   display: none;
   position: fixed;
@@ -83,4 +88,30 @@ button:hover{
   height: 8rem;
   display: none;
   border-radius: 3px;
+}
+
+#mobileArrows{
+  position: absolute;
+  bottom: 2rem;
+  right: 1.5rem;
+  width: 8rem;
+  height: 8rem;
+  display: none;
+  border-radius: 3px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#mobileArrows > i{
+  font-size: 3rem;
+  -o-transition: all 1s ease-out;
+  transition: all 1s ease-out; 
+  -webkit-transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+}
+
+#mobileArrows > i:hover{  
+  color: #6d6d6d;
 }

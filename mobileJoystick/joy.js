@@ -186,6 +186,7 @@ var JoyStick = (function(container, parameters, callback)
         {
             movedX = event.targetTouches[0].pageX;
             movedY = event.targetTouches[0].pageY;
+
             // Manage offset
             if(canvas.offsetParent.tagName.toUpperCase() === "BODY")
             {
