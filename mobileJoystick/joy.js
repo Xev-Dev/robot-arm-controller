@@ -187,11 +187,13 @@ var JoyStick = (function(container, parameters, callback)
             movedX = event.targetTouches[0].pageX;
             movedY = event.targetTouches[0].pageY;
             console.log(movedX, movedY);
+            //que el joystick mueva un componente del brazo
             if (movedX < 100) {
-                window.armbase2.setValue(window.armbase2.object._y+(movedX)*0.02);
+                window.guis.armbase2.setValue(window.guis.armbase2.object._y+0.05);
             } else {
-                window.armbase2.setValue(window.armbase2.object._y-(movedX)*0.02);
+                window.guis.armbase2.setValue(window.guis.armbase2.object._y-0.05);
             }
+
             // Manage offset
             if(canvas.offsetParent.tagName.toUpperCase() === "BODY")
             {

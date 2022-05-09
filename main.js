@@ -204,7 +204,7 @@ function setJoystick(){
             //External reference circonference color
             externalStrokeColor: '#000000',
             // Sets the behavior of the stick
-            autoReturnToCenter: false
+            autoReturnToCenter: true
     })
     console.log(window.joystick.GetX(),window.joystick.GetY());
 }
