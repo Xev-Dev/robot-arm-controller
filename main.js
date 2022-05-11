@@ -15,7 +15,7 @@ window.joystick = undefined
 //Creamos una variable window con la array de los guis
 window.guis = guis
 const socket = io("http://localhost:3300")
-
+onMainWindowSize();
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function () {
     var controller = Controller.getController(0)
@@ -190,6 +190,7 @@ function onWindowSize() {
         document.getElementById('controlls-container').style.display = "none"
         document.getElementById('joyDiv').style.display = "block"
         document.getElementById('mobileArrows').style.display = "flex"
+        document.getElementById('pccontroller_button').style.display = "block"
         if (!window.joystick) {
             //Set mobile joystick if not exists window.joystick
             setJoystick()
@@ -198,8 +199,19 @@ function onWindowSize() {
         document.getElementById('controlls-container').style.display = "block"
         document.getElementById('joyDiv').style.display = "none"
         document.getElementById('mobileArrows').style.display = "none"
+        document.getElementById('pccontroller_button').style.display = "none"
     }
 }
+
+function onMainWindowSize() {
+    if (window.innerWidth < 926) {
+        document.getElementById('pccontroller_button').style.display = "block"
+    } else {
+        document.getElementById('pccontroller_button').style.display = "none"
+    }
+}
+
+
 
 //Funcion para setear los controles en el móvil
 function setJoystick() {
