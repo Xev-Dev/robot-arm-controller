@@ -2,13 +2,16 @@
   "name": "robotarmcontroller",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "electron ."
   },
   "devDependencies": {
     "@types/dat.gui": "^0.7.7",
+    "electron": "^18.2.2",
     "vite": "^2.9.5"
   },
   "dependencies": {
@@ -27,6 +30,7 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/xev023/RobotArmController/issues"
-  },
+  }, 
   "homepage": "https://github.com/xev023/RobotArmController#readme"
 }
+
