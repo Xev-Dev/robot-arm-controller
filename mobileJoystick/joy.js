@@ -182,10 +182,17 @@ var JoyStick = (function(container, parameters, callback)
 
     function onTouchMove(event)
     {
+
         if(pressed === 1 && event.targetTouches[0].target === canvas)
         {
             movedX = event.targetTouches[0].pageX;
             movedY = event.targetTouches[0].pageY;
+            
+            if (movedX < 100) {
+                window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.05);
+            }else {
+                window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.05);
+            }
 
             // Manage offset
             if(canvas.offsetParent.tagName.toUpperCase() === "BODY")

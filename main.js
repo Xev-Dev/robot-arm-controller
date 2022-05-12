@@ -1,5 +1,3 @@
-
-import 'regenerator-runtime/runtime'
 import * as THREE from 'three'
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js'
@@ -15,7 +13,6 @@ window.joystick = undefined
 //Creamos una variable window con la array de los guis
 window.guis = guis
 const socket = io("http://localhost:3300")
-
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
     var controller = Controller.getController(0)
@@ -220,13 +217,15 @@ function setJoystick(){
             // Sets the behavior of the stick
             autoReturnToCenter: true
 
-    },function(stickData){
-        if (stickData.xPosition < 64) {
-            window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.05);
-        }else {
-            window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.05);
-        }
-    });
+
+            
+    // ,function(stickData){
+    //     if (stickData.xPosition < 64) {
+    //         window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.05);
+    //     }else {
+    //         window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.05);
+    //     }
+     });
     //console.log(window.joystick.GetX(),window.joystick.GetY());
 }
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
