@@ -9,7 +9,10 @@ import { io } from "socket.io-client"
 let look_x = 0
 let look_y = 35
 let look_z = 0
+let posBrazo = 0;
 window.joystick = undefined
+let arrowUp = document.getElementById('arrowUp');
+let arrowDown = document.getElementById('arrowDown');
 
 window.guis = {
     'armbase2':undefined,
@@ -18,14 +21,33 @@ window.guis = {
     'armbase5':undefined,
     'subarm5':undefined
 }
-const socket = io("http://localhost:3300")
+
+window.joystick = new JoyStick('joyDiv',{
+    title: 'joystick',
+    width: 120,
+    height: 120,
+    internalFillColor: '#000000',
+    internalLineWidth: 2,
+    internalStrokeColor: '#000000',
+    externalLineWidth: 2,
+    externalStrokeColor: '#000000',
+    autoReturnToCenter: true
+});
+
+var joystick = document.getElementById("joystick");
+const socket = io("http://localhost:3300");
+
+joystick.addEventListener("touchmove",function(){
+    moverBrazo(posBrazo);
+},false);
 
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function() {
     var controller = Controller.getController(0)
     window.a = controller.settings.list()
     console.log(controller.layoutInfo)
-}, false)
+}, false);
+
 // Funcion que detecta los botones del mando (Cruzeta,gatillos,botones)
 window.addEventListener('gc.button.hold', function(event) {
     var button = event.detail
@@ -169,6 +191,7 @@ window.setWorld = function setWorld() {
         window.guis.armbase4=gui.add(pivot2.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)/2-0.3).name('Armbase4')
         window.guis.armbase5=gui.add(pivot3.rotation, 'z',(Math.PI*2*-1)/2+0.3, (Math.PI*2)-0.3).name('Armbase5')
         window.guis.subarm5=gui.add(pivot4.rotation, 'y',(Math.PI*2*-1)/2+0.3, (Math.PI*2)-0.3).name('SubArm5')
+        posBrazo = 1;
         loop()
     })  
 }
@@ -178,10 +201,6 @@ function onWindowSize(){
         document.getElementById('controlls-container').style.display="none"
         document.getElementById('joyDiv').style.display="block"
         document.getElementById('mobileArrows').style.display="flex"
-        if(!window.joystick){
-             //Set mobile joystick if not exists window.joystick
-            setJoystick()
-        }
     }else{
         document.getElementById('controlls-container').style.display="block"
         document.getElementById('joyDiv').style.display="none"
@@ -189,35 +208,68 @@ function onWindowSize(){
     }
 }
 
-//Funcion para setear los controles en el móvil
-function setJoystick(){
-    window.joystick = new JoyStick('joyDiv',{
-            // The ID of canvas element
-            title: 'joystick',
-            // width/height
-            width: undefined,
-            height: undefined,
-            internalFillColor: '#000000',
-            // Border width of Stick
-            internalLineWidth: 2,
-            // Border color of Stick
-            internalStrokeColor: '#000000',
-            // External reference circonference width
-            externalLineWidth: 2,
-            //External reference circonference color
-            externalStrokeColor: '#000000',
-            // Sets the behavior of the stick
-            autoReturnToCenter: true
-
-    },function(stickData){
-        if (stickData.xPosition < 64) {
-            window.guis.armbase2.setValue(window.guis.armbase2.object._y+0.05);
-        }else {
-            window.guis.armbase2.setValue(window.guis.armbase2.object._y-0.05);
-        }
-    });
-    //console.log(window.joystick.GetX(),window.joystick.GetY());
+function moverBrazo(posBrazo){
+    switch (posBrazo) {
+        case 1:
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                window.guis.armbase2.setValue(window.guis.armbase2.object._y+0.09);
+            }
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                window.guis.armbase2.setValue(window.guis.armbase2.object._y-0.09);
+            }
+            break
+        case 2:
+            if (window.joystick.GetDir() === 'N' && window.joystick.GetY() >= 0 && window.joystick.GetY() <= 114) {
+                window.guis.armbase3.setValue(window.guis.armbase3.object._y+0.05);
+            }
+            if (window.joystick.GetDir() === 'S' && window.joystick.GetY() >= -114 && window.joystick.GetY() <= -0) {
+                window.guis.armbase3.setValue(window.guis.armbase3.object._y-0.05);
+            }          
+            break
+        case 3:
+            if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 30) {
+                window.guis.armbase4.setValue(window.guis.armbase4.object._y+0.05);
+            }
+            if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -30 && window.joystick.GetX() <= -0) {
+                window.guis.armbase4.setValue(window.guis.armbase4.object._y-0.05);
+            }               
+            break
+        case 4:
+            if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 30) {
+                window.guis.armbase5.setValue(window.guis.armbase5.object._y+0.05);
+            }
+            if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -30 && window.joystick.GetX() <= -0) {
+                window.guis.armbase5.setValue(window.guis.armbase5.object._y-0.05);
+            }               
+            break
+        case 5:
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                window.guis.subarm5.setValue(window.guis.subarm5.object._y+0.09);
+            }
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                window.guis.subarm5.setValue(window.guis.subarm5.object._y-0.09);
+            }            
+            break
+        default:
+            break
+    }
 }
+
+
+arrowUp.addEventListener('click',()=>{
+    posBrazo++;
+    if(posBrazo >5){
+        posBrazo = 5;
+    }
+});
+
+arrowDown.addEventListener('click',()=>{
+    posBrazo--;
+    if(posBrazo > 1){
+        posBrazo = 1;
+    }
+});
+
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1,item2){
     //  PARA VER LOS EJES DE LOS PIVOTES
