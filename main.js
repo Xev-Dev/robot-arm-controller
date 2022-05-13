@@ -217,7 +217,6 @@ function onWindowSize(){
 }
 
 function moverBrazo(posBrazo){
-    console.log(posBrazo);
     switch (posBrazo) {
         case 1:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
