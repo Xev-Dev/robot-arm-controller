@@ -12,7 +12,13 @@ let look_z = 0
 window.joystick = undefined
 //Creamos una variable window con la array de los guis
 window.guis = guis
-const socket = io("http://localhost:3300")
+window.room = ""
+window.socket = io("http://localhost:3300")
+socket.on('setRoom',(room)=>{
+    console.log(room)
+    window.room = room
+    document.getElementById('room').innerHTML+=`<p>Room key: ${window.room}</p>`
+})
 onMainWindowSize();
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function () {
@@ -48,7 +54,6 @@ window.addEventListener('gc.button.hold', function (event) {
             break
     }
 }, false)
-
 // Funcion que detecta los joysticks
 window.addEventListener('gc.analog.hold', function (event) {
     var stick = event.detail
@@ -74,7 +79,7 @@ window.addEventListener('gc.analog.hold', function (event) {
     }
 }, false)
 ////THREE JS SUPER FUNCTION
-window.setWorld = function setWorld() {
+window.setWorld = function (){
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     pl.position.set(30, 60, 40)
@@ -166,7 +171,20 @@ window.setWorld = function setWorld() {
         loop()
     })
 }
-
+window.hiddenButtons = function(){
+    document.getElementById('controller_button').style.display='none'
+    document.getElementById('pccontroller_button').style.display='none'
+    document.getElementById('roomKey').style.display='flex'
+}
+window.setWorldController = function (){
+    console.log(document.getElementById('roomInput').value)
+    socket.emit('joinRoom',document.getElementById('roomInput').value)
+    document.getElementById('menu').style.display = 'none'
+    document.getElementById('mobileArrows').style.display = 'flex'
+    document.getElementById('joyDiv').style.display = 'block'
+    document.getElementById('mobileBackground').style.display = 'block'
+    setJoystick()
+}
 window.changeComponent = function (direction) {
     if (direction === 'up') {
         console.log(direction)
@@ -194,13 +212,13 @@ function onWindowSize() {
             setJoystick()
         }
     } else {
+        document.getElementById('room').style.display="block"
         document.getElementById('controlls-container').style.display = "block"
         document.getElementById('joyDiv').style.display = "none"
         document.getElementById('mobileArrows').style.display = "none"
         document.getElementById('pccontroller_button').style.display = "none"
     }
 }
-
 function onMainWindowSize() {
     if (window.innerWidth < 926) {
         document.getElementById('pccontroller_button').style.display = "block"
@@ -208,9 +226,6 @@ function onMainWindowSize() {
         document.getElementById('pccontroller_button').style.display = "none"
     }
 }
-
-
-
 //Funcion para setear los controles en el móvil
 function setJoystick() {
     window.joystick = new JoyStick('joyDiv', {
@@ -230,14 +245,24 @@ function setJoystick() {
         externalStrokeColor: '#000000',
         // Sets the behavior of the stick
         autoReturnToCenter: true
-
     }, function (stickData) {
-        if (stickData.xPosition < 64) {
-            window.guis[0].gui.setValue(window.guis[0].gui.object._y + 0.05);
-        } else {
-            window.guis[0].gui.setValue(window.guis[0].gui.object._y - 0.05);
-        }
-    });
+        //Mobile robot joystick controller
+        if(document.getElementById('mobileBackground').style.display === 'none'){
+            if (stickData.xPosition < 64) {
+                window.guis[0].gui.setValue(window.guis[0].gui.object._y + 0.05);
+            } else {
+                window.guis[0].gui.setValue(window.guis[0].gui.object._y - 0.05);
+            }
+        //Mobile joystick controller with socket io
+        }else{
+            //GESTIONAR SOCKET IO JOYSTICK MOVIL     
+            if (stickData.xPosition < 64) {
+                socket.emit('armbase2',true)
+            } else {
+                socket.emit('armbase2',false)
+            }
+        }    
+    })
     //console.log(window.joystick.GetX(),window.joystick.GetY());
 }
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot

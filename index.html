@@ -19,8 +19,13 @@
         <span class="title1">DPad</span>
         <span class="title2">Robot</span>
       </div> 
-      <button onclick="setWorld()">Entrar</button>
-      <button id="pccontroller_button" onclick="setWorld()">PcController</button>
+      <button id="controller_button" onclick="setWorld()">Entrar</button>
+      <button id="pccontroller_button" onclick="hiddenButtons()">PcController</button>
+      <div id="roomKey">
+        <label for="roomInput">Room key</label>
+        <input id="roomInput" type="text" name="roomInput" placeholder="Insert the room key">
+        <button class="roomSubmit" onclick="setWorldController()">Accept</button>
+      </div>
       <div class="empty"></div>
     </div>
     <div id="controlls-container">
@@ -35,11 +40,13 @@
         <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/joystick_right-256.png" style="width: 50px; height: 50px;"/>Rotar cabeza</span>
       </div>
     </div>
+    <div id="room"></div>
     <div id="joyDiv"></div>
     <div id="mobileArrows">
       <i onclick="changeComponent('up')" class="fa-solid fa-circle-arrow-up"></i>
       <i onclick="changeComponent('down')" class="fa-solid fa-circle-arrow-down"></i>
     </div>
     <div id="world"></div>
+    <div id="mobileBackground"></div>
   </body>
 </html>
