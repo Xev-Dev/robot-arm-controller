@@ -84,10 +84,7 @@ button:hover{
   position: absolute;
   bottom: 2rem;
   left: 2rem;
-  width: 8rem;
-  height: 8rem;
   display: none;
-  border-radius: 3px;
 }
 
 #mobileArrows{

@@ -9,7 +9,32 @@ console.log(await Controller.search())
 let look_x = 0
 let look_y = 35
 let look_z = 0
+let posBrazo = 0;
 window.joystick = undefined
+let arrowUp = document.getElementById('arrowUp');
+let arrowDown = document.getElementById('arrowDown');
+
+window.guis = {
+    'armbase2':undefined,
+    'armbase3':undefined,
+    'armbase4':undefined,
+    'armbase5':undefined,
+    'subarm5':undefined
+}
+
+window.joystick = new JoyStick('joyDiv',{
+    title: 'joystick',
+    width: 120,
+    height: 120,
+    internalFillColor: '#000000',
+    internalLineWidth: 2,
+    internalStrokeColor: '#000000',
+    externalLineWidth: 2,
+    externalStrokeColor: '#000000',
+    autoReturnToCenter: true
+});
+
+var joystick = document.getElementById("joystick");
 //Creamos una variable window con la array de los guis
 window.guis = guis
 window.room = ""
@@ -19,13 +44,20 @@ socket.on('setRoom',(room)=>{
     window.room = room
     document.getElementById('room').innerHTML+=`<p>Room key: ${window.room}</p>`
 })
+
+joystick.addEventListener("touchmove",function(){
+    moverBrazo(posBrazo);
+},false);
+
 onMainWindowSize();
+
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function () {
     var controller = Controller.getController(0)
     window.a = controller.settings.list()
     console.log(controller.layoutInfo)
-}, false)
+}, false);
+
 // Funcion que detecta los botones del mando (Cruzeta,gatillos,botones)
 window.addEventListener('gc.button.hold', function (event) {
     var button = event.detail
@@ -163,11 +195,13 @@ window.setWorld = function (){
         componentsArray.SubArm5.position.z += 6.5
         //Aqui se añaden las partes del brazo al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
         const gui = new GUI()
+
         window.guis[0].gui = gui.add(componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('ArmBase2')
         window.guis[1].gui = gui.add(pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase3')
         window.guis[2].gui = gui.add(pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase4')
         window.guis[3].gui = gui.add(pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Armbase5')
         window.guis[4].gui = gui.add(pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('SubArm5')
+        posBrazo = 1;
         loop()
     })
 }
@@ -219,6 +253,54 @@ function onWindowSize() {
         document.getElementById('pccontroller_button').style.display = "none"
     }
 }
+
+function moverBrazo(posBrazo){
+    console.log(posBrazo);
+    switch (posBrazo) {
+        case 1:
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09);
+            }
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
+            }
+            break
+        case 2:
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                window.guis[1].gui.setValue(window.guis[1].gui.object._z - 0.05);
+            }
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                window.guis[1].gui.setValue(window.guis[1].gui.object._z + 0.05);
+            }          
+            break
+        case 3:
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                window.guis[2].gui.setValue(window.guis[2].gui.object._z - 0.05);
+            }
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
+            }               
+            break
+        case 4:
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
+            }
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
+            }               
+            break
+        case 5:
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09);
+            }
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09);
+            }            
+            break
+        default:
+            break
+    }
+}
 function onMainWindowSize() {
     if (window.innerWidth < 926) {
         document.getElementById('pccontroller_button').style.display = "block"
@@ -265,6 +347,22 @@ function setJoystick() {
     })
     //console.log(window.joystick.GetX(),window.joystick.GetY());
 }
+
+
+arrowUp.addEventListener('click',()=>{
+    posBrazo++;
+    if(posBrazo >5){
+        posBrazo = 5;
+    }
+});
+
+arrowDown.addEventListener('click',()=>{
+    posBrazo--;
+    if(posBrazo < 1){
+        posBrazo = 1;
+    }
+});
+
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1, item2) {
     //  PARA VER LOS EJES DE LOS PIVOTES
