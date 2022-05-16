@@ -1,5 +1,3 @@
-
-import 'regenerator-runtime/runtime'
 import * as THREE from 'three'
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js'
@@ -16,7 +14,7 @@ let nombreBrazoSeleccionado = undefined;
 window.joystick = undefined
 let arrowUp = document.getElementById('arrowUp');
 let arrowDown = document.getElementById('arrowDown');
-
+window.remote = false
 window.guis = {
     'armbase2':undefined,
     'armbase3':undefined,
@@ -40,14 +38,57 @@ window.joystick = new JoyStick('joyDiv',{
 var joystick = document.getElementById("joystick");
 //Creamos una variable window con la array de los guis
 window.guis = guis
-const socket = io("http://localhost:3300");
-
+window.room = ""
+window.socket = io("http://localhost:3300")
+socket.on('setRoom',(room)=>{
+    console.log(room)
+    window.room = room
+    document.getElementById('room').innerHTML+=`<p>Room key: ${window.room}</p>`
+})
+socket.on('setRemote',(room)=>{
+    console.log(room)
+    window.room = room
+    window.remote = true
+})
+socket.on('armbase2',(bool)=>{
+    if(bool){
+        window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
+    }else{
+        window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09);
+    }
+})
+socket.on('armbase3',(bool)=>{
+    if(bool){
+        window.guis[1].gui.setValue(window.guis[1].gui.object._z+0.05);
+    }else{
+        window.guis[1].gui.setValue(window.guis[1].gui.object._z-0.05);
+    }
+})
+socket.on('armbase4',(bool)=>{
+    if(bool){
+        window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
+    }else{
+        window.guis[2].gui.setValue(window.guis[2].gui.object._z-0.05);
+    }
+})
+socket.on('armbase5',(bool)=>{
+    if(bool){
+        window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
+    }else{
+        window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
+    }
+})
+socket.on('subarm5',(bool)=>{
+    if(bool){
+        window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09);
+    }else{
+        window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09);
+    }
+})
 joystick.addEventListener("touchmove",function(){
     moverBrazo(posBrazo);
 },false);
-
 onMainWindowSize();
-
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function () {
     var controller = Controller.getController(0)
@@ -83,7 +124,6 @@ window.addEventListener('gc.button.hold', function (event) {
             break
     }
 }, false)
-
 // Funcion que detecta los joysticks
 window.addEventListener('gc.analog.hold', function (event) {
     var stick = event.detail
@@ -109,9 +149,10 @@ window.addEventListener('gc.analog.hold', function (event) {
     }
 }, false)
 ////THREE JS SUPER FUNCTION
-window.setWorld = function setWorld() {
+window.setWorld = function (){
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
+    document.getElementById('room').style.display="block"
     pl.position.set(30, 60, 40)
     const sphereSize = 1
     //Creamos un helper para saber donde se encuentra el punto de luz 
@@ -204,69 +245,126 @@ window.setWorld = function setWorld() {
     })
 }
 
-function onWindowSize(){
-    window.render.setSize( window.innerWidth, window.innerHeight )
-    if(window.innerWidth < 926){
-        document.getElementById('controlls-container').style.display="none"
-        document.getElementById('joyDiv').style.display="block"
-        document.getElementById('mobileArrows').style.display="flex"
-        document.getElementById('armSelected').style.display="block"
-
-    }else{
-        document.getElementById('controlls-container').style.display="block"
-        document.getElementById('joyDiv').style.display="none"
-        document.getElementById('mobileArrows').style.display="none"
-        document.getElementById('armSelected').style.display="none"
-    }
+window.hiddenButtons = function(){
+    document.getElementById('controller_button').style.display='none'
+    document.getElementById('pccontroller_button').style.display='none'
+    document.getElementById('roomKey').style.display='flex'
+}
+window.setWorldController = function (){
+    socket.emit('joinRoom',document.getElementById('roomInput').value)
+    document.getElementById('menu').style.display = 'none'
+    document.getElementById('mobileArrows').style.display = 'flex'
+    document.getElementById('joyDiv').style.display = 'block'
+    document.getElementById('mobileBackground').style.display = 'block'
+    posBrazo = 1;
 }
 
+function onWindowSize() {
+    window.render.setSize(window.innerWidth, window.innerHeight)
+    if (window.innerWidth < 926) {
+        document.getElementById('controlls-container').style.display = "none"
+        document.getElementById('joyDiv').style.display = "block"
+        document.getElementById('mobileArrows').style.display = "flex"
+        document.getElementById('pccontroller_button').style.display = "block"
+        document.getElementById('armSelected').style.display="block"
+    } else {
+        document.getElementById('room').style.display="block"
+        document.getElementById('controlls-container').style.display = "block"
+        document.getElementById('joyDiv').style.display = "none"
+        document.getElementById('mobileArrows').style.display = "none"
+        document.getElementById('pccontroller_button').style.display = "none"
+        document.getElementById('armSelected').style.display="none"
+
+    }
+}
 function moverBrazo(posBrazo){
+
     switch (posBrazo) {
         case 1:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09);
+                if(window.remote){
+                    socket.emit('armbase2',true)
+                }else{
+                    window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
+                }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
+                if(window.remote){
+                    socket.emit('armbase2',false)
+                }else{
+                    window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09);
+                }
             }
             break
         case 2:
             if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[1].gui.setValue(window.guis[1].gui.object._z - 0.05);
+                if(window.remote){
+                    socket.emit('armbase3',false)
+                }else{
+                    window.guis[1].gui.setValue(window.guis[1].gui.object._z - 0.05);
+                }
             }
             if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[1].gui.setValue(window.guis[1].gui.object._z + 0.05);
+                if(window.remote){
+                    socket.emit('armbase3',true)
+                }else{
+                    window.guis[1].gui.setValue(window.guis[1].gui.object._z + 0.05);
+                }
             }          
             break
         case 3:
             if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[2].gui.setValue(window.guis[2].gui.object._z - 0.05);
+                if(window.remote){
+                    socket.emit('armbase4',false)
+                }else{
+                    window.guis[2].gui.setValue(window.guis[2].gui.object._z - 0.05);
+                }
             }
             if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
+                if(window.remote){
+                    socket.emit('armbase4',true)
+                }else{
+                    window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
+                }
             }               
             break
         case 4:
             if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
+                if(window.remote){
+                    socket.emit('armbase5',false)
+                }else{
+                    window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
+                }
             }
             if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
+                if(window.remote){
+                    socket.emit('armbase5',true)
+                }else{
+                    window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
+                }
+                
             }               
             break
         case 5:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09);
+                if(window.remote){
+                    socket.emit('subarm5',true)
+                }else{
+                    window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09);
+                }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09);
+                if(window.remote){
+                    socket.emit('subarm5',false)
+                }else{
+                    window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09);
+                }
             }            
             break
         default:
             break
     }
 }
-
 function onMainWindowSize() {
     if (window.innerWidth < 926) {
         document.getElementById('pccontroller_button').style.display = "block"

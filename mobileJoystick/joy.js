@@ -182,6 +182,7 @@ var JoyStick = (function(container, parameters, callback)
 
     function onTouchMove(event)
     {
+
         if(pressed === 1 && event.targetTouches[0].target === canvas)
         {
             movedX = event.targetTouches[0].pageX;
