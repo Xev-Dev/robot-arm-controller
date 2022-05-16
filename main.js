@@ -12,6 +12,7 @@ let look_x = 0
 let look_y = 35
 let look_z = 0
 let posBrazo = 0;
+let nombreBrazoSeleccionado = undefined;
 window.joystick = undefined
 let arrowUp = document.getElementById('arrowUp');
 let arrowDown = document.getElementById('arrowDown');
@@ -209,10 +210,13 @@ function onWindowSize(){
         document.getElementById('controlls-container').style.display="none"
         document.getElementById('joyDiv').style.display="block"
         document.getElementById('mobileArrows').style.display="flex"
+        document.getElementById('armSelected').style.display="block"
+
     }else{
         document.getElementById('controlls-container').style.display="block"
         document.getElementById('joyDiv').style.display="none"
-        document.getElementById('mobileArrows').style.display="none"    
+        document.getElementById('mobileArrows').style.display="none"
+        document.getElementById('armSelected').style.display="none"
     }
 }
 
@@ -227,26 +231,26 @@ function moverBrazo(posBrazo){
             }
             break
         case 2:
-            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+            if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
                 window.guis[1].gui.setValue(window.guis[1].gui.object._z - 0.05);
             }
-            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+            if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 window.guis[1].gui.setValue(window.guis[1].gui.object._z + 0.05);
             }          
             break
         case 3:
-            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+            if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
                 window.guis[2].gui.setValue(window.guis[2].gui.object._z - 0.05);
             }
-            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+            if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
             }               
             break
         case 4:
-            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+            if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
                 window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
             }
-            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+            if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
             }               
             break
@@ -271,12 +275,38 @@ function onMainWindowSize() {
     }
 }
 
+function armSelected(){
+
+    switch (posBrazo) {
+        case 1:
+            nombreBrazoSeleccionado = "Armbase2";
+            break
+        case 2:
+            nombreBrazoSeleccionado = "Armbase3";        
+            break
+        case 3:
+            nombreBrazoSeleccionado = "Armbase4";              
+            break
+        case 4:
+            nombreBrazoSeleccionado = "Armbase5";              
+            break
+        case 5:
+            nombreBrazoSeleccionado = "SubarmBase5";           
+            break
+        default:
+            break
+    }
+
+    document.getElementById('armSelected').innerHTML = '<h2>Brazo seleccionado</h2><pre>'+nombreBrazoSeleccionado+'</pre>';
+}
+
 
 arrowUp.addEventListener('click',()=>{
     posBrazo++;
     if(posBrazo >5){
         posBrazo = 5;
     }
+    armSelected();
 });
 
 arrowDown.addEventListener('click',()=>{
@@ -284,6 +314,7 @@ arrowDown.addEventListener('click',()=>{
     if(posBrazo < 1){
         posBrazo = 1;
     }
+    armSelected();
 });
 
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
