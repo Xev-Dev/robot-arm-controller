@@ -13,7 +13,7 @@ let posBrazo = 0;
 window.joystick = undefined
 let arrowUp = document.getElementById('arrowUp');
 let arrowDown = document.getElementById('arrowDown');
-
+window.remote = false
 window.guis = {
     'armbase2':undefined,
     'armbase3':undefined,
@@ -44,13 +44,50 @@ socket.on('setRoom',(room)=>{
     window.room = room
     document.getElementById('room').innerHTML+=`<p>Room key: ${window.room}</p>`
 })
-
+socket.on('setRemote',(room)=>{
+    console.log(room)
+    window.room = room
+    window.remote = true
+})
+socket.on('armbase2',(bool)=>{
+    if(bool){
+        window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
+    }else{
+        window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09);
+    }
+})
+socket.on('armbase3',(bool)=>{
+    if(bool){
+        window.guis[1].gui.setValue(window.guis[1].gui.object._z+0.05);
+    }else{
+        window.guis[1].gui.setValue(window.guis[1].gui.object._z-0.05);
+    }
+})
+socket.on('armbase4',(bool)=>{
+    if(bool){
+        window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
+    }else{
+        window.guis[2].gui.setValue(window.guis[2].gui.object._z-0.05);
+    }
+})
+socket.on('armbase5',(bool)=>{
+    if(bool){
+        window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
+    }else{
+        window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
+    }
+})
+socket.on('subarm5',(bool)=>{
+    if(bool){
+        window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09);
+    }else{
+        window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09);
+    }
+})
 joystick.addEventListener("touchmove",function(){
     moverBrazo(posBrazo);
 },false);
-
 onMainWindowSize();
-
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function () {
     var controller = Controller.getController(0)
@@ -114,6 +151,7 @@ window.addEventListener('gc.analog.hold', function (event) {
 window.setWorld = function (){
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
+    document.getElementById('room').style.display="block"
     pl.position.set(30, 60, 40)
     const sphereSize = 1
     //Creamos un helper para saber donde se encuentra el punto de luz 
@@ -253,52 +291,98 @@ function onWindowSize() {
         document.getElementById('pccontroller_button').style.display = "none"
     }
 }
-
 function moverBrazo(posBrazo){
     console.log(posBrazo);
-    switch (posBrazo) {
-        case 1:
-            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09);
-            }
-            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
-            }
-            break
-        case 2:
-            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[1].gui.setValue(window.guis[1].gui.object._z - 0.05);
-            }
-            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[1].gui.setValue(window.guis[1].gui.object._z + 0.05);
-            }          
-            break
-        case 3:
-            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[2].gui.setValue(window.guis[2].gui.object._z - 0.05);
-            }
-            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
-            }               
-            break
-        case 4:
-            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
-            }
-            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
-            }               
-            break
-        case 5:
-            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09);
-            }
-            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09);
-            }            
-            break
-        default:
-            break
+    if(window.remote){
+        switch (posBrazo) {
+            case 1:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                    socket.emit('armbase2',false)
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                    socket.emit('armbase2',true)
+                }
+                break
+            case 2:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                    socket.emit('armbase3',false)
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                    socket.emit('armbase3',true)
+                }          
+                break
+            case 3:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                    socket.emit('armbase4',false)
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                    socket.emit('armbase4',true)
+                }               
+                break
+            case 4:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                    socket.emit('armbase5',false)
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                    socket.emit('armbase5',true)
+                }               
+                break
+            case 5:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                    socket.emit('subarm5',false);
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                    socket.emit('subarm5',true)
+                }            
+                break
+            default:
+                break
+        }
+    }else{
+        switch (posBrazo) {
+            case 1:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                        window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09);
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                        window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
+                }
+                break
+            case 2:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                    window.guis[1].gui.setValue(window.guis[1].gui.object._z - 0.05);
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                    window.guis[1].gui.setValue(window.guis[1].gui.object._z + 0.05);
+                }          
+                break
+            case 3:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                    window.guis[2].gui.setValue(window.guis[2].gui.object._z - 0.05);
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                    window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
+                }               
+                break
+            case 4:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                    window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                    window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
+                }               
+                break
+            case 5:
+                if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                    window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09);
+                }
+                if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                    window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09);
+                }            
+                break
+            default:
+                break
+        }
     }
 }
 function onMainWindowSize() {
