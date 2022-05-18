@@ -297,14 +297,14 @@ function moverBrazo(posBrazo){
             }
             break
         case 2:
-            if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
                 if(window.remote){
                     socket.emit('armbase3',false)
                 }else{
                     window.guis[1].gui.setValue(window.guis[1].gui.object._z - 0.05);
                 }
             }
-            if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 if(window.remote){
                     socket.emit('armbase3',true)
                 }else{
@@ -313,14 +313,14 @@ function moverBrazo(posBrazo){
             }          
             break
         case 3:
-            if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
                 if(window.remote){
                     socket.emit('armbase4',false)
                 }else{
                     window.guis[2].gui.setValue(window.guis[2].gui.object._z - 0.05);
                 }
             }
-            if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 if(window.remote){
                     socket.emit('armbase4',true)
                 }else{
@@ -329,14 +329,14 @@ function moverBrazo(posBrazo){
             }               
             break
         case 4:
-            if (window.joystick.GetDir() === 'N' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
                 if(window.remote){
                     socket.emit('armbase5',false)
                 }else{
                     window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
                 }
             }
-            if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 if(window.remote){
                     socket.emit('armbase5',true)
                 }else{
