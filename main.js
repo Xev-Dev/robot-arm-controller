@@ -9,12 +9,16 @@ console.log(await Controller.search())
 let look_x = 0
 let look_y = 35
 let look_z = 0
-let posBrazo = 0;
-let nombreBrazoSeleccionado = undefined;
+let posBrazo = 0
+let nombreBrazoSeleccionado = undefined
 window.joystick = undefined
-let arrowUp = document.getElementById('arrowUp');
-let arrowDown = document.getElementById('arrowDown');
+window.three = THREE
+let arrowUp = document.getElementById('arrowUp')
+let arrowDown = document.getElementById('arrowDown')
 window.remote = false
+window.componentsArray = {}
+window.boxHelper = null
+window.robotActivePart = null
 window.guis = {
     'armbase2':undefined,
     'armbase3':undefined,
@@ -22,7 +26,6 @@ window.guis = {
     'armbase5':undefined,
     'subarm5':undefined
 }
-
 window.joystick = new JoyStick('joyDiv',{
     title: 'joystick',
     width: 120,
@@ -33,73 +36,68 @@ window.joystick = new JoyStick('joyDiv',{
     externalLineWidth: 2,
     externalStrokeColor: '#000000',
     autoReturnToCenter: true
-});
-
-var joystick = document.getElementById("joystick");
+})
+var joystick = document.getElementById("joystick")
 //Creamos una variable window con la array de los guis
 window.guis = guis
 window.room = ""
 window.socket = io("http://localhost:3300")
 socket.on('setRoom',(room)=>{
-    console.log(room)
     window.room = room
     document.getElementById('room').innerHTML+=`<p>Room key: ${window.room}</p>`
 })
 socket.on('setRemote',(room)=>{
-    console.log(room)
     window.room = room
     window.remote = true
 })
 socket.on('armbase2',(bool)=>{
     if(bool){
-        window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
+        window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09)
     }else{
-        window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09);
+        window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09)
     }
 })
 socket.on('armbase3',(bool)=>{
     if(bool){
-        window.guis[1].gui.setValue(window.guis[1].gui.object._z+0.05);
+        window.guis[1].gui.setValue(window.guis[1].gui.object._z+0.05)
     }else{
-        window.guis[1].gui.setValue(window.guis[1].gui.object._z-0.05);
+        window.guis[1].gui.setValue(window.guis[1].gui.object._z-0.05)
     }
 })
 socket.on('armbase4',(bool)=>{
     if(bool){
-        window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
+        window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05)
     }else{
-        window.guis[2].gui.setValue(window.guis[2].gui.object._z-0.05);
+        window.guis[2].gui.setValue(window.guis[2].gui.object._z-0.05)
     }
 })
 socket.on('armbase5',(bool)=>{
     if(bool){
-        window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
+        window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05)
     }else{
-        window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
+        window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05)
     }
 })
 socket.on('subarm5',(bool)=>{
     if(bool){
-        window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09);
+        window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09)
     }else{
-        window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09);
+        window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09)
     }
 })
 joystick.addEventListener("touchmove",function(){
-    moverBrazo(posBrazo);
-},false);
-onMainWindowSize();
+    moverBrazo(posBrazo)
+},false)
+onMainWindowSize()
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function () {
     var controller = Controller.getController(0)
     window.a = controller.settings.list()
-    console.log(controller.layoutInfo)
-}, false);
+}, false)
 
 // Funcion que detecta los botones del mando (Cruzeta,gatillos,botones)
 window.addEventListener('gc.button.hold', function (event) {
     var button = event.detail
-    console.log(button)
     //El switch coge el boton que estas tocando y asigna un valor a un componente segun el boton pulsado
     switch (button.name) {
         case "LEFT_SHOULDER":
@@ -127,7 +125,6 @@ window.addEventListener('gc.button.hold', function (event) {
 // Funcion que detecta los joysticks
 window.addEventListener('gc.analog.hold', function (event) {
     var stick = event.detail
-    console.log(stick)
     //El switch coge el boton que estas tocando y asigna un valor a un componente segun el boton pulsado
     switch (stick.name) {
         case "LEFT_ANALOG_STICK":
@@ -209,38 +206,36 @@ window.setWorld = function (){
         renderer.render(scene, camera)
         controls.update()
     }
-    //console.log(window.joystick.GetPosX());
+    //console.log(window.joystick.GetPosX())
     //Cargamos nuestro modelo 3d y disponemos de una función de callback con el resultado.
     var loader = new ColladaLoader()
     loader.load("./models/ur10_2.dae", function (result) {
-        let componentsArray = []
-        componentsArray = getRobotItems(result.scene, componentsArray)
-        scene.add(componentsArray.ArmBase)
-        scene.add(componentsArray.ArmBase2)
-        let pivot1 = setPivot(componentsArray.ArmBase2, componentsArray.ArmBase3)
+        window.componentsArray = getRobotItems(result.scene, componentsArray)
+        scene.add(window.componentsArray.ArmBase)
+        scene.add(window.componentsArray.ArmBase2)
+        let pivot1 = setPivot(window.componentsArray.ArmBase2, window.componentsArray.ArmBase3)
         pivot1.position.y += 5
-        componentsArray.ArmBase3.position.y -= 5
-        let pivot2 = setPivot(componentsArray.ArmBase3, componentsArray.ArmBase4)
+        window.componentsArray.ArmBase3.position.y -= 5
+        let pivot2 = setPivot(window.componentsArray.ArmBase3, window.componentsArray.ArmBase4)
         pivot2.position.y += 29
-        componentsArray.ArmBase4.position.y -= 29
-        let pivot3 = setPivot(componentsArray.ArmBase4, componentsArray.ArmBase5)
+        window.componentsArray.ArmBase4.position.y -= 29
+        let pivot3 = setPivot(window.componentsArray.ArmBase4, window.componentsArray.ArmBase5)
         pivot3.position.y += 52
-        componentsArray.ArmBase5.position.y -= 52
-        let pivot4 = setPivot(componentsArray.ArmBase5, componentsArray.SubArm5)
+        window.componentsArray.ArmBase5.position.y -= 52
+        let pivot4 = setPivot(window.componentsArray.ArmBase5, window.componentsArray.SubArm5)
         pivot4.position.y += 57
-        componentsArray.SubArm5.position.y -= 57
+        window.componentsArray.SubArm5.position.y -= 57
         pivot4.position.z -= 6.5
         //-2.8, 2.8
-        componentsArray.SubArm5.position.z += 6.5
+        window.componentsArray.SubArm5.position.z += 6.5
         //Aqui se añaden las partes del brazo al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
         const gui = new GUI()
-
-        window.guis[0].gui = gui.add(componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('ArmBase2')
+        window.guis[0].gui = gui.add(window.componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('ArmBase2')
         window.guis[1].gui = gui.add(pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase3')
         window.guis[2].gui = gui.add(pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase4')
         window.guis[3].gui = gui.add(pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Armbase5')
         window.guis[4].gui = gui.add(pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('SubArm5')
-        posBrazo = 1;
+        posBrazo = 1
         loop()
     })
 }
@@ -256,9 +251,8 @@ window.setWorldController = function (){
     document.getElementById('mobileArrows').style.display = 'flex'
     document.getElementById('joyDiv').style.display = 'block'
     document.getElementById('mobileBackground').style.display = 'block'
-    posBrazo = 1;
+    posBrazo = 1
 }
-
 function onWindowSize() {
     window.render.setSize(window.innerWidth, window.innerHeight)
     if (window.innerWidth < 926) {
@@ -266,33 +260,29 @@ function onWindowSize() {
         document.getElementById('joyDiv').style.display = "block"
         document.getElementById('mobileArrows').style.display = "flex"
         document.getElementById('pccontroller_button').style.display = "block"
-        document.getElementById('armSelected').style.display="block"
     } else {
         document.getElementById('room').style.display="block"
         document.getElementById('controlls-container').style.display = "block"
         document.getElementById('joyDiv').style.display = "none"
         document.getElementById('mobileArrows').style.display = "none"
         document.getElementById('pccontroller_button').style.display = "none"
-        document.getElementById('armSelected').style.display="none"
-
     }
 }
 function moverBrazo(posBrazo){
-
     switch (posBrazo) {
         case 1:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
                 if(window.remote){
                     socket.emit('armbase2',true)
                 }else{
-                    window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
+                    window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09)
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 if(window.remote){
                     socket.emit('armbase2',false)
                 }else{
-                    window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09);
+                    window.guis[0].gui.setValue(window.guis[0].gui.object._y-0.09)
                 }
             }
             break
@@ -301,14 +291,14 @@ function moverBrazo(posBrazo){
                 if(window.remote){
                     socket.emit('armbase3',false)
                 }else{
-                    window.guis[1].gui.setValue(window.guis[1].gui.object._z - 0.05);
+                    window.guis[1].gui.setValue(window.guis[1].gui.object._z - 0.05)
                 }
             }
             if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 if(window.remote){
                     socket.emit('armbase3',true)
                 }else{
-                    window.guis[1].gui.setValue(window.guis[1].gui.object._z + 0.05);
+                    window.guis[1].gui.setValue(window.guis[1].gui.object._z + 0.05)
                 }
             }          
             break
@@ -317,14 +307,14 @@ function moverBrazo(posBrazo){
                 if(window.remote){
                     socket.emit('armbase4',false)
                 }else{
-                    window.guis[2].gui.setValue(window.guis[2].gui.object._z - 0.05);
+                    window.guis[2].gui.setValue(window.guis[2].gui.object._z - 0.05)
                 }
             }
             if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 if(window.remote){
                     socket.emit('armbase4',true)
                 }else{
-                    window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05);
+                    window.guis[2].gui.setValue(window.guis[2].gui.object._z+0.05)
                 }
             }               
             break
@@ -333,14 +323,14 @@ function moverBrazo(posBrazo){
                 if(window.remote){
                     socket.emit('armbase5',false)
                 }else{
-                    window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05);
+                    window.guis[3].gui.setValue(window.guis[3].gui.object._z-0.05)
                 }
             }
             if (window.joystick.GetDir() === 'S' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 if(window.remote){
                     socket.emit('armbase5',true)
                 }else{
-                    window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05);
+                    window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05)
                 }
                 
             }               
@@ -350,14 +340,14 @@ function moverBrazo(posBrazo){
                 if(window.remote){
                     socket.emit('subarm5',true)
                 }else{
-                    window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09);
+                    window.guis[4].gui.setValue(window.guis[4].gui.object._y+0.09)
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
                 if(window.remote){
                     socket.emit('subarm5',false)
                 }else{
-                    window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09);
+                    window.guis[4].gui.setValue(window.guis[4].gui.object._y-0.09)
                 }
             }            
             break
@@ -372,49 +362,43 @@ function onMainWindowSize() {
         document.getElementById('pccontroller_button').style.display = "none"
     }
 }
-
 function armSelected(){
-
+    removeBoxHelper()
     switch (posBrazo) {
         case 1:
-            nombreBrazoSeleccionado = "Armbase2";
+            window.robotActivePart = window.componentsArray.ArmBase2
             break
         case 2:
-            nombreBrazoSeleccionado = "Armbase3";        
+            window.robotActivePart = window.componentsArray.ArmBase3
             break
         case 3:
-            nombreBrazoSeleccionado = "Armbase4";              
+            window.robotActivePart = window.componentsArray.ArmBase4
             break
         case 4:
-            nombreBrazoSeleccionado = "Armbase5";              
+            window.robotActivePart = window.componentsArray.ArmBase5
             break
         case 5:
-            nombreBrazoSeleccionado = "SubarmBase5";           
+            window.robotActivePart = window.componentsArray.SubArm5
             break
         default:
             break
     }
-
-    document.getElementById('armSelected').innerHTML = '<h2>Brazo seleccionado</h2><pre>'+nombreBrazoSeleccionado+'</pre>';
+    addBoxHelper()
 }
-
-
 arrowUp.addEventListener('click',()=>{
-    posBrazo++;
+    posBrazo++
     if(posBrazo >5){
-        posBrazo = 5;
+        posBrazo = 5
     }
-    armSelected();
-});
-
+    armSelected()
+})
 arrowDown.addEventListener('click',()=>{
-    posBrazo--;
+    posBrazo--
     if(posBrazo < 1){
-        posBrazo = 1;
+        posBrazo = 1
     }
-    armSelected();
-});
-
+    armSelected()
+})
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1, item2) {
     //  PARA VER LOS EJES DE LOS PIVOTES
@@ -437,4 +421,17 @@ function getRobotItems(object_group, componentsArray) {
         componentsArray = Object.assign({}, componentsArray, temp_componentsArray)
     })
     return componentsArray
+}
+function removeBoxHelper(){
+    if(window.robotActivePart){
+        window.robotActivePart.children.splice(window.robotActivePart.children.length-1)
+    }
+}
+function addBoxHelper(){
+    if(window.robotActivePart){
+        var boxHelper = new window.three.BoxHelper(window.robotActivePart,0x00ff00)
+        boxHelper.matrixAutoUpdate=true
+        window.robotActivePart.add(boxHelper)
+        window.boxHelper = boxHelper
+    }
 }
