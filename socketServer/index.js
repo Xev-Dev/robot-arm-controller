@@ -1,5 +1,4 @@
 const { Socket } = require("socket.io-client")
-
 const server = require("http").createServer()
 const io = require("socket.io")(server, {
     cors: {
@@ -7,7 +6,6 @@ const io = require("socket.io")(server, {
         methods: ["GET", "POST"]
     },
 })
-
 io.on("connection",(socket)=>{
     var myRoom = socket.id.match(/.{1,6}/g)[0] 
     socket.join(myRoom)
