@@ -10,8 +10,10 @@
     <script src="./controller/Controller.min.js"></script>
     <script src="./controller/Controller.layouts.min.js"></script> 
     <script src="./mobileJoystick/joy.js"></script>
-    <script type="module" src="sockets.js"></script>
-    <script type="module" src="./main.js"></script>
+    <script type="module" src="./src/main.js"></script>
+    <script type="module" src="./src/controllerInputs.js"></script>
+    <script type="module" src="./src/mobileInputs.js"></script>
+    <script type="module" src="./src/socketInputs.js"></script>
     <script src="https://kit.fontawesome.com/1b4e6e77cf.js" crossorigin="anonymous"></script>
   </head>
   <body>
@@ -28,9 +30,6 @@
         <button class="roomSubmit" onclick="setWorldController()">Accept</button>
       </div>
       <div class="empty"></div>
-    </div>
-    <button id="controller_button" onclick="setWorld()">Entrar</button>
-    <button id="pccontroller_button" onclick="hiddenButtons()">PcController</button>
     <div id="roomKey">
       <label for="roomInput">Room key</label>
       <input id="roomInput" type="text" name="roomInput" placeholder="Insert the room key">
@@ -67,5 +66,4 @@
   <div id="world"></div>
   <div id="mobileBackground"></div>
 </body>
-
 </html>

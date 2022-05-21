@@ -1,4 +1,4 @@
-import {socket} from './helpers/socketConf'
+import {socket} from '../helpers/socketConf'
 socket.on('setRoom',(room)=>{
     window.room = room
     document.getElementById('room').innerHTML+=`<p>Room key: ${window.room}</p>`
