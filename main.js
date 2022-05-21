@@ -41,7 +41,11 @@ var joystick = document.getElementById("joystick")
 //Creamos una variable window con la array de los guis
 window.guis = guis
 window.room = ""
-window.socket = io("http://localhost:3300")
+window.pivot1 = null
+window.pivot2 = null
+window.pivot3 = null
+window.pivot4 = null
+const socket = io("http://localhost:3300")
 socket.on('setRoom',(room)=>{
     window.room = room
     document.getElementById('room').innerHTML+=`<p>Room key: ${window.room}</p>`
@@ -205,6 +209,9 @@ window.setWorld = function (){
         requestAnimationFrame(loop)
         renderer.render(scene, camera)
         controls.update()
+        if(window.boxHelper){
+            window.boxHelper.update();
+        }
     }
     //console.log(window.joystick.GetPosX())
     //Cargamos nuestro modelo 3d y disponemos de una función de callback con el resultado.
@@ -212,29 +219,29 @@ window.setWorld = function (){
     loader.load("./models/ur10_2.dae", function (result) {
         window.componentsArray = getRobotItems(result.scene, componentsArray)
         scene.add(window.componentsArray.ArmBase)
-        scene.add(window.componentsArray.ArmBase2)
-        let pivot1 = setPivot(window.componentsArray.ArmBase2, window.componentsArray.ArmBase3)
-        pivot1.position.y += 5
+        scene.add(window.componentsArray.ArmBase2)                                                                 
+        window.pivot1 = setPivot(window.componentsArray.ArmBase2, window.componentsArray.ArmBase3)
+        window.pivot1.position.y += 5
         window.componentsArray.ArmBase3.position.y -= 5
-        let pivot2 = setPivot(window.componentsArray.ArmBase3, window.componentsArray.ArmBase4)
-        pivot2.position.y += 29
+        window.pivot2 = setPivot(window.componentsArray.ArmBase3, window.componentsArray.ArmBase4)
+        window.pivot2.position.y += 29
         window.componentsArray.ArmBase4.position.y -= 29
-        let pivot3 = setPivot(window.componentsArray.ArmBase4, window.componentsArray.ArmBase5)
-        pivot3.position.y += 52
+        window.pivot3 = setPivot(window.componentsArray.ArmBase4, window.componentsArray.ArmBase5)
+        window.pivot3.position.y += 52
         window.componentsArray.ArmBase5.position.y -= 52
-        let pivot4 = setPivot(window.componentsArray.ArmBase5, window.componentsArray.SubArm5)
-        pivot4.position.y += 57
+        window.pivot4 = setPivot(window.componentsArray.ArmBase5, window.componentsArray.SubArm5)
+        window.pivot4.position.y += 57
         window.componentsArray.SubArm5.position.y -= 57
-        pivot4.position.z -= 6.5
+        window.pivot4.position.z -= 6.5
         //-2.8, 2.8
         window.componentsArray.SubArm5.position.z += 6.5
         //Aqui se añaden las partes del brazo al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
         const gui = new GUI()
         window.guis[0].gui = gui.add(window.componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('ArmBase2')
-        window.guis[1].gui = gui.add(pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase3')
-        window.guis[2].gui = gui.add(pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase4')
-        window.guis[3].gui = gui.add(pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Armbase5')
-        window.guis[4].gui = gui.add(pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('SubArm5')
+        window.guis[1].gui = gui.add(window.pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase3')
+        window.guis[2].gui = gui.add(window.pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase4')
+        window.guis[3].gui = gui.add(window.pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Armbase5')
+        window.guis[4].gui = gui.add(window.pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('SubArm5')
         posBrazo = 1
         loop()
     })
@@ -331,8 +338,7 @@ function moverBrazo(posBrazo){
                     socket.emit('armbase5',true)
                 }else{
                     window.guis[3].gui.setValue(window.guis[3].gui.object._z+0.05)
-                }
-                
+                }   
             }               
             break
         case 5:
@@ -367,23 +373,35 @@ function armSelected(){
     switch (posBrazo) {
         case 1:
             window.robotActivePart = window.componentsArray.ArmBase2
+            addBoxHelper()
             break
         case 2:
-            window.robotActivePart = window.componentsArray.ArmBase3
+            window.robotActivePart = window.pivot1
+            addBoxHelper()
+            window.boxHelper.position.y -= 5
             break
         case 3:
-            window.robotActivePart = window.componentsArray.ArmBase4
+            window.robotActivePart = window.pivot2
+            addBoxHelper()
+            window.boxHelper.position.y -= 29
+            //Aqui hay que modificar alguna propiedad del box helper dependiendo del pivot anterior para que no se descoloque
+            //window.boxHelper.rotation.z = window.pivot1.rotation.z
             break
         case 4:
-            window.robotActivePart = window.componentsArray.ArmBase5
+            window.robotActivePart = window.pivot3
+            addBoxHelper()
+            window.boxHelper.position.y -= 52
+            // window.boxHelper.rotation.z = window.pivot2.rotation.z
             break
         case 5:
-            window.robotActivePart = window.componentsArray.SubArm5
+            window.robotActivePart = window.pivot4
+            addBoxHelper()
+            window.boxHelper.position.y -= 57
+            // window.boxHelper.rotation.z = window.pivot3.rotation.z + 6.5
             break
         default:
             break
     }
-    addBoxHelper()
 }
 arrowUp.addEventListener('click',()=>{
     posBrazo++
@@ -402,9 +420,9 @@ arrowDown.addEventListener('click',()=>{
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1, item2) {
     //  PARA VER LOS EJES DE LOS PIVOTES
-    //let axes = new THREE.AxisHelper(105) 
+    // let axes = new THREE.AxisHelper(105) 
     let pivot = new THREE.Object3D()
-    //pivot.add(axes)
+    // pivot.add(axes)
     item1.add(pivot)
     pivot.add(item2)
     return pivot
