@@ -22,10 +22,19 @@ window.pivot1 = null
 window.pivot2 = null
 window.pivot3 = null
 window.pivot4 = null
+window.mobile = false
 //Constantes
 const lookX = 0
 const lookY = 35
 const lookZ = 0
+//Handle mobile device or pc device
+if("ontouchstart" in document.documentElement){
+    window.mobile = true
+    document.getElementById('pccontroller_button').style.display = "block"
+}else{
+    window.mobile = false
+    document.getElementById('pccontroller_button').style.display = "none"
+}
 //FUNCIONES BOTONES DOM
 ////Funcion que renderiza el mundo 3d, prepara el escenario y el modelo 
 window.setWorld = function () {
@@ -136,33 +145,23 @@ window.setWorldController = function () {
     document.getElementById('mobileArrows').style.display = 'flex'
     document.getElementById('joyDiv').style.display = 'block'
     document.getElementById('mobileBackground').style.display = 'block'
-    armPosition = 1
+    window.armPosition = 1
 }
 //FUNCIONES PARA MODULARIZAR EL CÓDIGO
-//Funcion para cambiar de modo movil a modo pc
+//Funcion para gestionar el resize en pc y la aparicion del joystick en el movil 
 function onWindowSize() {
     window.render.setSize(window.innerWidth, window.innerHeight)
-    if (window.innerWidth < 926) {
-        document.getElementById('controlls-container').style.display = "none"
+    if(!window.mobile){
+        if (window.innerWidth < 926) {
+            document.getElementById('controlls-container').style.display = "none"
+        } else {
+            document.getElementById('controlls-container').style.display = "block"
+        }
+    }else{
         document.getElementById('joyDiv').style.display = "block"
         document.getElementById('mobileArrows').style.display = "flex"
-        document.getElementById('pccontroller_button').style.display = "block"
-    } else {
-        document.getElementById('room').style.display = "block"
-        document.getElementById('controlls-container').style.display = "block"
-        document.getElementById('joyDiv').style.display = "none"
-        document.getElementById('mobileArrows').style.display = "none"
-        document.getElementById('pccontroller_button').style.display = "none"
     }
 }
-function onMainWindowSize() {
-    if (window.innerWidth < 926) {
-        document.getElementById('pccontroller_button').style.display = "block"
-    } else {
-        document.getElementById('pccontroller_button').style.display = "none"
-    }
-}
-
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1, item2) {
     //  PARA VER LOS EJES DE LOS PIVOTES
@@ -186,4 +185,3 @@ function getRobotItems(object_group, componentsArray) {
     })
     return componentsArray
 }
-onMainWindowSize()
