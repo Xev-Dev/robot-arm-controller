@@ -13,13 +13,13 @@ window.componentsArray = {}
 window.boxHelper = null
 window.robotActivePart = null
 window.guis = {
-    'armBase2':undefined,
-    'armBase3':undefined,
-    'armBase4':undefined,
-    'armBase5':undefined,
-    'subArm5':undefined
+    'armBase2': undefined,
+    'armBase3': undefined,
+    'armBase4': undefined,
+    'armBase5': undefined,
+    'subArm5': undefined
 }
-window.joystick = new JoyStick('joyDiv',{
+window.joystick = new JoyStick('joyDiv', {
     title: 'joystick',
     width: 120,
     height: 120,
@@ -45,19 +45,19 @@ const lookZ = 0
 //Variable  
 let armPosition = 0
 //Listeners al joystick y el cambio de componente para versión móvil
-joystick.addEventListener("touchmove",function(){
+joystick.addEventListener("touchmove", function () {
     moveArm(armPosition)
-},false)
-arrowUp.addEventListener('click',()=>{
+}, false)
+arrowUp.addEventListener('click', () => {
     armPosition++
-    if(armPosition >5){
+    if (armPosition > 5) {
         armPosition = 5
     }
     armSelected()
 })
-arrowDown.addEventListener('click',()=>{
+arrowDown.addEventListener('click', () => {
     armPosition--
-    if(armPosition < 1){
+    if (armPosition < 1) {
         armPosition = 1
     }
     armSelected()
@@ -121,10 +121,10 @@ window.addEventListener('gc.analog.hold', function (event) {
 }, false)
 //FUNCIONES BOTONES DOM
 ////Funcion que renderiza el mundo 3d, prepara el escenario y el modelo 
-window.setWorld = function (){
+window.setWorld = function () {
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
-    document.getElementById('room').style.display="block"
+    document.getElementById('room').style.display = "block"
     pl.position.set(30, 60, 40)
     const sphereSize = 1
     //Creamos un helper para saber donde se encuentra el punto de luz 
@@ -180,7 +180,7 @@ window.setWorld = function (){
         requestAnimationFrame(loop)
         renderer.render(scene, camera)
         controls.update()
-        if(window.boxHelper){
+        if (window.boxHelper) {
             window.boxHelper.update();
         }
     }
@@ -190,7 +190,7 @@ window.setWorld = function (){
     loader.load("./models/ur10_2.dae", function (result) {
         window.componentsArray = getRobotItems(result.scene, componentsArray)
         scene.add(window.componentsArray.ArmBase)
-        scene.add(window.componentsArray.ArmBase2)                                                                 
+        scene.add(window.componentsArray.ArmBase2)
         window.pivot1 = setPivot(window.componentsArray.ArmBase2, window.componentsArray.ArmBase3)
         window.pivot1.position.y += 5
         window.componentsArray.ArmBase3.position.y -= 5
@@ -218,14 +218,14 @@ window.setWorld = function (){
     })
 }
 //Funcion para ocultar los botones y mostrar el formulario para el modo remoto
-window.hiddenButtons = function(){
-    document.getElementById('controller_button').style.display='none'
-    document.getElementById('pccontroller_button').style.display='none'
-    document.getElementById('roomKey').style.display='flex'
+window.hiddenButtons = function () {
+    document.getElementById('controller_button').style.display = 'none'
+    document.getElementById('pccontroller_button').style.display = 'none'
+    document.getElementById('roomKey').style.display = 'flex'
 }
 //Funcion para entrar al modo de control remoto
-window.setWorldController = function (){
-    socket.emit('joinRoom',document.getElementById('roomInput').value)
+window.setWorldController = function () {
+    socket.emit('joinRoom', document.getElementById('roomInput').value)
     document.getElementById('menu').style.display = 'none'
     document.getElementById('mobileArrows').style.display = 'flex'
     document.getElementById('joyDiv').style.display = 'block'
@@ -242,7 +242,7 @@ function onWindowSize() {
         document.getElementById('mobileArrows').style.display = "flex"
         document.getElementById('pccontroller_button').style.display = "block"
     } else {
-        document.getElementById('room').style.display="block"
+        document.getElementById('room').style.display = "block"
         document.getElementById('controlls-container').style.display = "block"
         document.getElementById('joyDiv').style.display = "none"
         document.getElementById('mobileArrows').style.display = "none"
@@ -250,87 +250,87 @@ function onWindowSize() {
     }
 }
 //Funcion para mover el brazo en la version movil y para cuando quieres controlar remotamente otro robot
-function moveArm(armPosition){
+function moveArm(armPosition) {
     switch (armPosition) {
         case 1:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                if(window.remote){
-                    socket.emit('armbase2',true)
-                }else{
-                    window.guis.armBase2.setValue(window.guis.armBase2.object._y+0.09)
+                if (window.remote) {
+                    socket.emit('armbase2', true)
+                } else {
+                    window.guis.armBase2.setValue(window.guis.armBase2.object._y + 0.09)
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                if(window.remote){
-                    socket.emit('armbase2',false)
-                }else{
-                    window.guis.armBase2.setValue(window.guis.armBase2.object._y-0.09)
+                if (window.remote) {
+                    socket.emit('armbase2', false)
+                } else {
+                    window.guis.armBase2.setValue(window.guis.armBase2.object._y - 0.09)
                 }
             }
             break
         case 2:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                if(window.remote){
-                    socket.emit('armbase3',false)
-                }else{
+                if (window.remote) {
+                    socket.emit('armbase3', false)
+                } else {
                     window.guis.armBase3.setValue(window.guis.armBase3.object._z - 0.05)
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                if(window.remote){
-                    socket.emit('armbase3',true)
-                }else{
+                if (window.remote) {
+                    socket.emit('armbase3', true)
+                } else {
                     window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05)
                 }
-            }          
+            }
             break
         case 3:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                if(window.remote){
-                    socket.emit('armbase4',false)
-                }else{
+                if (window.remote) {
+                    socket.emit('armbase4', false)
+                } else {
                     window.guis.armBase4.setValue(window.guis.armBase4.object._z - 0.05)
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                if(window.remote){
-                    socket.emit('armbase4',true)
-                }else{
-                    window.guis.armBase4.setValue(window.guis.armBase4.object._z+0.05)
+                if (window.remote) {
+                    socket.emit('armbase4', true)
+                } else {
+                    window.guis.armBase4.setValue(window.guis.armBase4.object._z + 0.05)
                 }
-            }               
+            }
             break
         case 4:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                if(window.remote){
-                    socket.emit('armbase5',false)
-                }else{
-                    window.guis.armBase5.setValue(window.guis.armBase5.object._z-0.05)
+                if (window.remote) {
+                    socket.emit('armbase5', false)
+                } else {
+                    window.guis.armBase5.setValue(window.guis.armBase5.object._z - 0.05)
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                if(window.remote){
-                    socket.emit('armbase5',true)
-                }else{
-                    window.guis.armBase5.setValue(window.guis.armBase5.object._z+0.05)
-                }   
-            }               
+                if (window.remote) {
+                    socket.emit('armbase5', true)
+                } else {
+                    window.guis.armBase5.setValue(window.guis.armBase5.object._z + 0.05)
+                }
+            }
             break
         case 5:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
-                if(window.remote){
-                    socket.emit('subarm5',true)
-                }else{
-                    window.guis.subArm5.setValue(window.guis.subArm5.object._y+0.09)
+                if (window.remote) {
+                    socket.emit('subarm5', true)
+                } else {
+                    window.guis.subArm5.setValue(window.guis.subArm5.object._y + 0.09)
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
-                if(window.remote){
-                    socket.emit('subarm5',false)
-                }else{
-                    window.guis.subArm5.setValue(window.guis.subArm5.object._y-0.09)
+                if (window.remote) {
+                    socket.emit('subarm5', false)
+                } else {
+                    window.guis.subArm5.setValue(window.guis.subArm5.object._y - 0.09)
                 }
-            }            
+            }
             break
         default:
             break
@@ -343,7 +343,7 @@ function onMainWindowSize() {
         document.getElementById('pccontroller_button').style.display = "none"
     }
 }
-function armSelected(){
+function armSelected() {
     removeBoxHelper()
     switch (armPosition) {
         case 1:
@@ -401,15 +401,15 @@ function getRobotItems(object_group, componentsArray) {
     })
     return componentsArray
 }
-function removeBoxHelper(){
-    if(window.robotActivePart){
-        window.robotActivePart.children.splice(window.robotActivePart.children.length-1)
+function removeBoxHelper() {
+    if (window.robotActivePart) {
+        window.robotActivePart.children.splice(window.robotActivePart.children.length - 1)
     }
 }
-function addBoxHelper(){
-    if(window.robotActivePart){
-        var boxHelper = new window.three.BoxHelper(window.robotActivePart,0x00ff00)
-        boxHelper.matrixAutoUpdate=true
+function addBoxHelper() {
+    if (window.robotActivePart) {
+        var boxHelper = new window.three.BoxHelper(window.robotActivePart, 0x00ff00)
+        boxHelper.matrixAutoUpdate = true
         window.robotActivePart.add(boxHelper)
         window.boxHelper = boxHelper
     }
