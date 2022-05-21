@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js'
 import { GUI } from 'dat.gui'
-import { io } from "socket.io-client"
+import {socket} from './helpers/socketConf'
 console.log(await Controller.search())
 //Variables en el objeto window o contexto superior para poder acceder en cualquier punto del código
 window.three = THREE
@@ -42,53 +42,8 @@ const arrowDown = document.getElementById('arrowDown')
 const lookX = 0
 const lookY = 35
 const lookZ = 0
-const socket = io("http://localhost:3300")
-//Variable
+//Variable  
 let armPosition = 0
-//Eventos de socket
-socket.on('setRoom',(room)=>{
-    window.room = room
-    document.getElementById('room').innerHTML+=`<p>Room key: ${window.room}</p>`
-})
-socket.on('setRemote',(room)=>{
-    window.room = room
-    window.remote = true
-})
-socket.on('armbase2',(bool)=>{
-    if(bool){
-        window.guis.armBase2.setValue(window.guis.armBase2.object._y+0.09)
-    }else{
-        window.guis.armBase2.setValue(window.guis.armBase2.object._y-0.09)
-    }
-})
-socket.on('armbase3',(bool)=>{
-    if(bool){
-        window.guis.armBase3.setValue(window.guis.armBase3.object._z+0.05)
-    }else{
-        window.guis.armBase3.setValue(window.guis.armBase3.object._z-0.05)
-    }
-})
-socket.on('armbase4',(bool)=>{
-    if(bool){
-        window.guis.armBase4.setValue(window.guis.armBase4.object._z+0.05)
-    }else{
-        window.guis.armBase4.setValue(window.guis.armBase4.object._z-0.05)
-    }
-})
-socket.on('armbase5',(bool)=>{
-    if(bool){
-        window.guis.armBase5.setValue(window.guis.armBase5.object._z+0.05)
-    }else{
-        window.guis.armBase5.setValue(window.guis.armBase5.object._z-0.05)
-    }
-})
-socket.on('subarm5',(bool)=>{
-    if(bool){
-        window.guis.subArm5.setValue(window.guis.subArm5.object._y+0.09)
-    }else{
-        window.guis.subArm5.setValue(window.guis.subArm5.object._y-0.09)
-    }
-})
 //Listeners al joystick y el cambio de componente para versión móvil
 joystick.addEventListener("touchmove",function(){
     moveArm(armPosition)
