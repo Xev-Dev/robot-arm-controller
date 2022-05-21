@@ -10,7 +10,7 @@ let look_x = 0
 let look_y = 35
 let look_z = 0
 let posBrazo = 0;
-let nombreBrazoSeleccionado = undefined;
+let ultimaPosicion = 0;
 window.joystick = undefined
 let arrowUp = document.getElementById('arrowUp');
 let arrowDown = document.getElementById('arrowDown');
@@ -88,12 +88,25 @@ socket.on('subarm5',(bool)=>{
 joystick.addEventListener("touchmove",function(){
     moverBrazo(posBrazo);
 },false);
-onMainWindowSize();
+
+joystick.addEventListener("touchend",function(){
+    ultimaPosicion = 0;
+},false);
+//onMainWindowSize();
 //Funcion que detecta un mando y lo almacena en una variable
 window.addEventListener('gc.controller.found', function () {
     var controller = Controller.getController(0)
     window.a = controller.settings.list()
     console.log(controller.layoutInfo)
+}, false);
+
+window.addEventListener("orientationchange", function() { 
+    alert(window.orientation); 
+    if(window.orientation === 90 || window.orientation === -90){
+        
+    }else{
+        
+    }
 }, false);
 
 // Funcion que detecta los botones del mando (Cruzeta,gatillos,botones)
@@ -266,29 +279,37 @@ function onWindowSize() {
         document.getElementById('joyDiv').style.display = "block"
         document.getElementById('mobileArrows').style.display = "flex"
         document.getElementById('pccontroller_button').style.display = "block"
-        document.getElementById('armSelected').style.display="block"
     } else {
         document.getElementById('room').style.display="block"
         document.getElementById('controlls-container').style.display = "block"
         document.getElementById('joyDiv').style.display = "none"
         document.getElementById('mobileArrows').style.display = "none"
         document.getElementById('pccontroller_button').style.display = "none"
-        document.getElementById('armSelected').style.display="none"
-
     }
 }
 function moverBrazo(posBrazo){
 
+    
+   
+
     switch (posBrazo) {
         case 1:
-            if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+            if (window.joystick.GetDir() === 'E') {
+                if(!correccionDireccion()){
+                    return;
+                }
+                ultimaPosicion =  window.joystick.GetX();
                 if(window.remote){
                     socket.emit('armbase2',true)
                 }else{
                     window.guis[0].gui.setValue(window.guis[0].gui.object._y+0.09);
                 }
             }
-            if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+            if (window.joystick.GetDir() === 'W') {
+                if(!correccionDireccion()){
+                    return;
+                }
+                ultimaPosicion =  window.joystick.GetX();
                 if(window.remote){
                     socket.emit('armbase2',false)
                 }else{
@@ -298,6 +319,7 @@ function moverBrazo(posBrazo){
             break
         case 2:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                ultimaPosicion =  window.joystick.GetX();
                 if(window.remote){
                     socket.emit('armbase3',false)
                 }else{
@@ -305,6 +327,7 @@ function moverBrazo(posBrazo){
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                ultimaPosicion =  window.joystick.GetX();
                 if(window.remote){
                     socket.emit('armbase3',true)
                 }else{
@@ -314,6 +337,7 @@ function moverBrazo(posBrazo){
             break
         case 3:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                ultimaPosicion =  window.joystick.GetX();
                 if(window.remote){
                     socket.emit('armbase4',false)
                 }else{
@@ -321,6 +345,7 @@ function moverBrazo(posBrazo){
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                ultimaPosicion =  window.joystick.GetX();
                 if(window.remote){
                     socket.emit('armbase4',true)
                 }else{
@@ -330,6 +355,7 @@ function moverBrazo(posBrazo){
             break
         case 4:
             if (window.joystick.GetDir() === 'E' && window.joystick.GetX() >= 0 && window.joystick.GetX() <= 114) {
+                ultimaPosicion =  window.joystick.GetX();
                 if(window.remote){
                     socket.emit('armbase5',false)
                 }else{
@@ -337,6 +363,7 @@ function moverBrazo(posBrazo){
                 }
             }
             if (window.joystick.GetDir() === 'W' && window.joystick.GetX() >= -114 && window.joystick.GetX() <= -0) {
+                ultimaPosicion =  window.joystick.GetX();
                 if(window.remote){
                     socket.emit('armbase5',true)
                 }else{
@@ -365,13 +392,13 @@ function moverBrazo(posBrazo){
             break
     }
 }
-function onMainWindowSize() {
-    if (window.innerWidth < 926) {
-        document.getElementById('pccontroller_button').style.display = "block"
-    } else {
-        document.getElementById('pccontroller_button').style.display = "none"
-    }
-}
+// function onMainWindowSize() {
+//     if (window.innerWidth < 926) {
+//         document.getElementById('pccontroller_button').style.display = "block"
+//     } else {
+//         document.getElementById('pccontroller_button').style.display = "none"
+//     }
+// }
 
 function armSelected(){
 
@@ -394,8 +421,6 @@ function armSelected(){
         default:
             break
     }
-
-    document.getElementById('armSelected').innerHTML = '<h2>Brazo seleccionado</h2><pre>'+nombreBrazoSeleccionado+'</pre>';
 }
 
 
@@ -437,4 +462,21 @@ function getRobotItems(object_group, componentsArray) {
         componentsArray = Object.assign({}, componentsArray, temp_componentsArray)
     })
     return componentsArray
+}
+
+function correccionDireccion() {
+
+    if(window.joystick.GetDir() === 'E' && ultimaPosicion > 100) {
+        ultimaPosicion = 100;
+    }
+
+    if( (window.joystick.GetDir() === 'W') && ultimaPosicion > -100 ) {
+        ultimaPosicion = -100;
+    }
+
+    if(  parseInt(window.joystick.GetX()) >= parseInt(ultimaPosicion) ) {
+        return true;
+    }
+
+    return false;
 }

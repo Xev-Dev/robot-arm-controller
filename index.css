@@ -109,17 +109,6 @@ button:hover{
   -moz-transition: all 1s ease-out;
 }
 
-
-#armSelected{
-  display: none;
-  left: 2rem;
-  top: 2rem;
-  position:absolute;
-  border: 2px solid black;
-  width: 200px;
-  height: 200px;
-  
-}
 #mobileArrows > i:hover{  
   color: #6d6d6d;
 }
