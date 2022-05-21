@@ -185,3 +185,9 @@ function getRobotItems(object_group, componentsArray) {
     })
     return componentsArray
 }
+//Funcion para volver al menu principal y salir del formulario de control remoto
+window.goBack = function(){
+    document.getElementById('controller_button').style.display = 'block'
+    document.getElementById('pccontroller_button').style.display = 'block'
+    document.getElementById('roomKey').style.display = 'none'
+}
