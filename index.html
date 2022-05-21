@@ -1,52 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link type="text/css" rel="stylesheet" href="index.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>DPadRobot</title>
-    <script src="./controller/Controller.min.js"></script>
-    <script src="./controller/Controller.layouts.min.js"></script> 
-    <script src="./mobileJoystick/joy.js"></script>
-    <script type="module" src="./main.js"></script>
-    <script src="https://kit.fontawesome.com/1b4e6e77cf.js" crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <div id="menu">
-      <div class="wrapper">
-        <span class="title1">DPad</span>
-        <span class="title2">Robot</span>
-      </div> 
-      <button id="controller_button" onclick="setWorld()">Entrar</button>
-      <button id="pccontroller_button" onclick="hiddenButtons()">PcController</button>
-      <div id="roomKey">
-        <label for="roomInput">Room key</label>
-        <input id="roomInput" type="text" name="roomInput" placeholder="Insert the room key">
-        <button class="roomSubmit" onclick="setWorldController()">Accept</button>
-      </div>
-      <div class="empty"></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link type="text/css" rel="stylesheet" href="index.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DPadRobot</title>
+  <script src="./controller/Controller.min.js"></script>
+  <script src="./controller/Controller.layouts.min.js"></script>
+  <script src="./mobileJoystick/joy.js"></script>
+  <script type="module" src="./main.js"></script>
+  <script src="https://kit.fontawesome.com/1b4e6e77cf.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div id="menu">
+    <div class="wrapper">
+      <span class="title1">DPad</span>
+      <span class="title2">Robot</span>
     </div>
-    <div id="controlls-container">
-      <div id="controlls">
-        <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/r1_button-128.png" style="width: 50px; height: 50px;"/>Rotar brazo 1 derecha</span>
-        <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/l1_button-128.png" style="width: 50px; height: 50px;"/>Rotar brazo 1 izquierda</span>
-        <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/r2_button-128.png" style="width: 50px; height: 50px;"/>Rotar brazo 2 derecha</span>
-        <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/l2_button-128.png" style="width: 50px; height: 50px;"/>Rotar brazo 2 izquierda</span>
-        <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/dpad_right-256.png" style="width: 50px; height: 50px;"/>Rotar brazo 3 derecha</span>
-        <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/dpad_left-256.png" style="width: 50px; height: 50px;"/>Rotar brazo 3 izquierda</span>
-        <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/joystick_left-256.png" style="width: 50px; height: 50px;"/>Rotar base</span>
-        <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/joystick_right-256.png" style="width: 50px; height: 50px;"/>Rotar cabeza</span>
-      </div>
+    <button id="controller_button" onclick="setWorld()">Entrar</button>
+    <button id="pccontroller_button" onclick="hiddenButtons()">PcController</button>
+    <div id="roomKey">
+      <label for="roomInput">Room key</label>
+      <input id="roomInput" type="text" name="roomInput" placeholder="Insert the room key">
+      <button class="roomSubmit" onclick="setWorldController()">Accept</button>
     </div>
-    <div id="room"></div>
-    <div id="joyDiv"></div>
-    <div id="mobileArrows">
-      <i id="arrowUp" class="fa-solid fa-circle-arrow-up"></i>
-      <i id="arrowDown" class="fa-solid fa-circle-arrow-down"></i>
+    <div class="empty"></div>
+  </div>
+  <div id="controlls-container">
+    <div id="controlls">
+      <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/r1_button-128.png"
+          style="width: 50px; height: 50px;" />Rotar brazo 1 derecha</span>
+      <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/l1_button-128.png"
+          style="width: 50px; height: 50px;" />Rotar brazo 1 izquierda</span>
+      <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/r2_button-128.png"
+          style="width: 50px; height: 50px;" />Rotar brazo 2 derecha</span>
+      <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/l2_button-128.png"
+          style="width: 50px; height: 50px;" />Rotar brazo 2 izquierda</span>
+      <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/dpad_right-256.png"
+          style="width: 50px; height: 50px;" />Rotar brazo 3 derecha</span>
+      <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/dpad_left-256.png"
+          style="width: 50px; height: 50px;" />Rotar brazo 3 izquierda</span>
+      <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/joystick_left-256.png"
+          style="width: 50px; height: 50px;" />Rotar base</span>
+      <span><img src="https://cdn1.iconfinder.com/data/icons/viiva-ps4-controller-buttons/32/joystick_right-256.png"
+          style="width: 50px; height: 50px;" />Rotar cabeza</span>
     </div>
-    <div id="world"></div>
-    <div id="mobileBackground"></div>
-  </body>
+  </div>
+  <div id="room"></div>
+  <div id="joyDiv"></div>
+  <div id="mobileArrows">
+    <i id="arrowUp" class="fa-solid fa-circle-arrow-up"></i>
+    <i id="arrowDown" class="fa-solid fa-circle-arrow-down"></i>
+  </div>
+  <div id="world"></div>
+  <div id="mobileBackground"></div>
+</body>
+
 </html>
