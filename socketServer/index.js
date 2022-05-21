@@ -1,4 +1,3 @@
-const { Socket } = require("socket.io-client")
 const server = require("http").createServer()
 const io = require("socket.io")(server, {
     cors: {

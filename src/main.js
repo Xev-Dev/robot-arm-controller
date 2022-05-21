@@ -97,7 +97,7 @@ window.setWorld = function () {
         renderer.render(scene, camera)
         controls.update()
         if (window.boxHelper) {
-            window.boxHelper.update();
+            window.boxHelper.update()
         }
     }
     //Cargamos nuestro modelo 3d y disponemos de una función de callback con el resultado.
