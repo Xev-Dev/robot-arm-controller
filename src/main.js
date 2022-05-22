@@ -96,9 +96,6 @@ window.setWorld = function () {
         requestAnimationFrame(loop)
         renderer.render(scene, camera)
         controls.update()
-        if (window.boxHelper) {
-            window.boxHelper.update()
-        }
     }
     //Cargamos nuestro modelo 3d y disponemos de una función de callback con el resultado.
     var loader = new ColladaLoader()
@@ -164,10 +161,13 @@ function onWindowSize() {
 }
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
 function setPivot(item1, item2) {
+    // let material = new THREE.Color('green');
     //  PARA VER LOS EJES DE LOS PIVOTES
     // let axes = new THREE.AxisHelper(105) 
     let pivot = new THREE.Object3D()
     // pivot.add(axes)
+    // item1.material = material;
+    // pivot.material = material;
     item1.add(pivot)
     pivot.add(item2)
     return pivot
@@ -175,9 +175,12 @@ function setPivot(item1, item2) {
 //Funcion recursiva a la cual le pasamos el robot y a si misma. 
 //Devuelve un objeto con objetos dentro de tipo grupo
 function getRobotItems(object_group, componentsArray) {
+    // let material = new THREE.Color('green');
     object_group.children.forEach(function (item) {
         var temp_componentsArray = []
         if (item.type == "Group" && !item.name.includes("ur10")) {
+            // item.material = material;
+            // console.log(item);
             componentsArray[item.name] = item
             temp_componentsArray = getRobotItems(item, componentsArray)
         }
