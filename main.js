@@ -39,7 +39,7 @@ var joystick = document.getElementById("joystick");
 //Creamos una variable window con la array de los guis
 window.guis = guis
 window.room = ""
-window.socket = io("http://localhost:3300")
+const socket = io("https://node.dpadrobot.es", {withCredential: true})
 socket.on('setRoom',(room)=>{
     console.log(room)
     window.room = room
