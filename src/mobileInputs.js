@@ -1,3 +1,4 @@
+import {socket} from '../helpers/socketConf'
 //Creamos el componente joystick
 window.joystick = new JoyStick('joyDiv', {
     title: 'joystick',
