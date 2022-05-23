@@ -157,6 +157,7 @@ function onWindowSize() {
     }else{
         document.getElementById('joyDiv').style.display = "block"
         document.getElementById('mobileArrows').style.display = "flex"
+        document.getElementById('room').style.display = "none"
     }
 }
 //Funcion que setea un pivot entre dos componentes del robot. Devuelve el pivot
