@@ -17,6 +17,9 @@ io.on("connection", (socket) => {
         console.log('joining room: ', myRoom)
         socket.emit('setRemote', myRoom)
     })
+    socket.on('setUpList',()=>{
+        socket.to(myRoom).emit('setUpList')
+    })
     socket.on('armbase2', (bool) => {
         socket.to(myRoom).emit('armbase2', (bool))
     })
@@ -31,6 +34,9 @@ io.on("connection", (socket) => {
     })
     socket.on('subarm5', (bool) => {
         socket.to(myRoom).emit('subarm5', (bool))
+    })
+    socket.on('moveList',(position)=>{
+        socket.to(myRoom).emit('moveList', (position))
     })
 })
 server.listen(3300, () => {

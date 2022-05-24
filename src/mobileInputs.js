@@ -43,16 +43,6 @@ arrowDown.addEventListener('click', () => {
     }
     armSelected();
 });
-
-window.addEventListener("orientationchange", function() {
-    if(window.orientation === 0){
-        //vettical
-    }
-
-    //horizontal
-    alert(window.orientation);
-  }, false);
-
 //Funcion para mover el brazo en la version movil y para cuando quieres controlar remotamente otro robot
 function moveArm(armPosition) {
     if(!isCanRotateArm()){
@@ -146,14 +136,18 @@ function moveArm(armPosition) {
 }
 //Función para aplicar estilos a la lista
 function armSelected() {
-    var node = document.getElementById("arrowSelector");
-    if (node.parentNode) {
-        node.parentNode.style.color='black'
-        node.parentNode.removeChild(node);
+    if(window.remote){
+        socket.emit('moveList',armPosition)
+    }else{
+        var node = document.getElementById("arrowSelector");
+        if (node.parentNode) {
+            node.parentNode.style.color='black'
+            node.parentNode.removeChild(node);
+        }
+        let items = document.getElementsByClassName('listItem')
+        items[armPosition].innerHTML+='<i id="arrowSelector" class="fa-solid fa-arrow-left-long"></i>'
+        items[armPosition].style.color = 'white'
     }
-    let items = document.getElementsByClassName('listItem')
-    items[armPosition].innerHTML+='<i id="arrowSelector" class="fa-solid fa-arrow-left-long"></i>'
-    items[armPosition].style.color = 'white'
 }
 function whilePressed() {
     console.log('eseeee');
@@ -161,7 +155,6 @@ function whilePressed() {
       moveArm(armPosition);
     }
 }
-
 function isCanRotateArm(){
     if(window.joystick.GetDir() === 'E' && parseInt(lastPositionStick) > 100){
         lastPositionStick = 100;
@@ -178,6 +171,5 @@ function isCanRotateArm(){
     if(window.joystick.GetDir() === 'W' && parseInt(window.joystick.GetX()) <= parseInt(lastPositionStick)){
         return true;
     }
-
     return false;
 }

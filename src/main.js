@@ -145,7 +145,6 @@ window.setWorldController = function () {
     document.getElementById('mobileArrows').style.display = 'flex'
     document.getElementById('joyDiv').style.display = 'block'
     document.getElementById('mobileBackground').style.display = 'block'
-    window.armPosition = 1
 }
 //FUNCIONES PARA MODULARIZAR EL CÓDIGO
 //Funcion para gestionar el resize en pc y la aparicion del joystick en el movil 

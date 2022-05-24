@@ -101,10 +101,10 @@ button:hover{
 #positionList{
   display:none;
   position: absolute;
-  top:1rem;
+  top:2.5rem;
   left:1rem;
   font-family: 'Goldman', cursive;
-  font-size: 2rem;
+  font-size: 1.5rem;
   flex-direction: column-reverse;
 }
 .listItem{
