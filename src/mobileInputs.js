@@ -16,21 +16,14 @@ const joystick = document.getElementById("joystick");
 const arrowUp = document.getElementById('arrowUp');
 const arrowDown = document.getElementById('arrowDown');
 window.armPosition = 0;
-let pressed= false;
-let interval;
 let lastPositionStick = 0;
-
-joystick.addEventListener("touchstart", function () {
-    pressed= true;
-}, false);
 
 //Listeners al joystick y el cambio de componente para versión móvil
 joystick.addEventListener("touchmove", function () {
-    whilePressed()
+    moveArm(armPosition);
 }, false);
 
 joystick.addEventListener("touchend", function () {
-    pressed= false;
     lastPositionStick = 0;
 }, false);
 
@@ -59,8 +52,6 @@ window.addEventListener("orientationchange", function() {
     //horizontal
     alert(window.orientation);
   }, false);
-
-  whilePressed();
 
 //Funcion para mover el brazo en la version movil y para cuando quieres controlar remotamente otro robot
 function moveArm(armPosition) {

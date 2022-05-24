@@ -81,10 +81,6 @@ button:hover{
 }
 #mobileArrows > i{
   font-size: 3rem;
-  -o-transition: all 1s ease-out;
-  transition: all 1s ease-out; 
-  -webkit-transition: all 1s ease-out;
-  -moz-transition: all 1s ease-out;
 }
 #mobileBackground{
   display: none;
