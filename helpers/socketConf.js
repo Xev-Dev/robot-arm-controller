@@ -1,3 +1,3 @@
 import { io } from "socket.io-client"
-const socket = io("wss://node.dpadrobot.es")
+const socket = io("http://localhost:3300")
 export {socket}
