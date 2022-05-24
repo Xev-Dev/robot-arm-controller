@@ -86,10 +86,6 @@ button:hover{
   -webkit-transition: all 1s ease-out;
   -moz-transition: all 1s ease-out;
 }
-#mobileArrows > i:hover{  
-  color: #6d6d6d;
-}
-
 #mobileBackground{
   display: none;
   background: rgb(51,51,51);
@@ -105,6 +101,20 @@ button:hover{
   color: white;
   text-shadow: 1px 1px 5px black;
   font-family: 'Goldman', cursive;
+}
+#positionList{
+  display:none;
+  position: absolute;
+  top:1rem;
+  left:1rem;
+  font-family: 'Goldman', cursive;
+  font-size: 2rem;
+  flex-direction: column-reverse;
+}
+.listItem{
+  display: flex;
+  align-items: center;
+  gap:1rem;
 }
 #roomKey{
   display: none;
@@ -129,7 +139,6 @@ button:hover{
   border:0;
   padding-left: 10px;
 }
-
 .roomSubmit{
   width: 8rem;
   height: 3rem;

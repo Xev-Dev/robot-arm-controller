@@ -35,17 +35,18 @@ joystick.addEventListener("touchend", function () {
 }, false);
 
 arrowUp.addEventListener('click', () => {
+    console.log(armPosition)
     armPosition++;
-    if (armPosition > 5) {
-        armPosition = 5
+    if (armPosition > 4) {
+        armPosition = 4
     }
     armSelected();
 });
 
 arrowDown.addEventListener('click', () => {
     armPosition--
-    if (armPosition < 1) {
-        armPosition = 1
+    if (armPosition < 0) {
+        armPosition = 0
     }
     armSelected();
 });
@@ -67,7 +68,7 @@ function moveArm(armPosition) {
         return;
     }
     switch (armPosition) {
-        case 1:
+        case 0:
             if (window.joystick.GetDir() === 'E') {
                 if (window.remote) {
                     socket.emit('armbase2', true);
@@ -83,7 +84,7 @@ function moveArm(armPosition) {
                 }
             }
             break
-        case 2:
+        case 1:
             if (window.joystick.GetDir() === 'E') {
                 if (window.remote) {
                     socket.emit('armbase3', false);
@@ -99,7 +100,7 @@ function moveArm(armPosition) {
                 }
             }
             break
-        case 3:
+        case 2:
             if (window.joystick.GetDir() === 'E') {
                 if (window.remote) {
                     socket.emit('armbase4', false);
@@ -115,7 +116,7 @@ function moveArm(armPosition) {
                 }
             }
             break
-        case 4:
+        case 3:
             if (window.joystick.GetDir() === 'E') {
                 if (window.remote) {
                     socket.emit('armbase5', false);
@@ -131,7 +132,7 @@ function moveArm(armPosition) {
                 }
             }
             break
-        case 5:
+        case 4:
             if (window.joystick.GetDir() === 'E') {
                 if (window.remote) {
                     socket.emit('subarm5', true);
@@ -152,61 +153,17 @@ function moveArm(armPosition) {
     }
     lastPositionStick = window.joystick.GetX()
 }
-
-//Función para saber que eje tenemos seleccionado
+//Función para aplicar estilos a la lista
 function armSelected() {
-    // removeBoxHelper()
-    switch (armPosition) {
-        case 1:
-            window.robotActivePart = window.componentsArray.ArmBase2
-            addBoxHelper()
-            break
-        case 2:
-            window.robotActivePart = window.pivot1
-            addBoxHelper()
-            // window.boxHelper.position.y -= 5
-            break
-        case 3:
-            window.robotActivePart = window.pivot2
-            addBoxHelper()
-            // window.boxHelper.position.y -= 29
-            //Aqui hay que modificar alguna propiedad del box helper dependiendo del pivot anterior para que no se descoloque
-            //window.boxHelper.rotation.z = window.pivot1.rotation.z
-            break
-        case 4:
-            window.robotActivePart = window.pivot3
-            addBoxHelper()
-            // window.boxHelper.position.y -= 52
-            // window.boxHelper.rotation.z = window.pivot2.rotation.z
-            break
-        case 5:
-            window.robotActivePart = window.pivot4
-            addBoxHelper()
-            // window.boxHelper.position.y -= 57
-            // window.boxHelper.rotation.z = window.pivot3.rotation.z + 6.5
-            break
-        default:
-            break
+    var node = document.getElementById("arrowSelector");
+    if (node.parentNode) {
+        node.parentNode.style.color='black'
+        node.parentNode.removeChild(node);
     }
+    let items = document.getElementsByClassName('listItem')
+    items[armPosition].innerHTML+='<i id="arrowSelector" class="fa-solid fa-arrow-left-long"></i>'
+    items[armPosition].style.color = 'white'
 }
-
-function removeBoxHelper() {
-    if (window.robotActivePart) {
-        window.robotActivePart.children.splice(window.robotActivePart.children.length - 1)
-    }
-}
-
-function addBoxHelper() {
-    if (window.robotActivePart) {
-        // window.robotActivePart.material.color = "f60491";
-        console.log(window.robotActivePart);
-        // var boxHelper = new window.three.BoxHelper(window.robotActivePart, 0x00ff00)
-        // boxHelper.matrixAutoUpdate = true
-        // window.robotActivePart.add(boxHelper)
-        // window.boxHelper = boxHelper
-    }
-}
-
 function whilePressed() {
     console.log('eseeee');
     if (pressed) {

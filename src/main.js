@@ -101,6 +101,10 @@ window.setWorld = function () {
     var loader = new ColladaLoader()
     loader.load("./models/ur10_2.dae", function (result) {
         window.componentsArray = getRobotItems(result.scene, componentsArray)
+        //Funcion para setear la lista de componentes
+        if(window.mobile){
+            displayList()
+        }
         scene.add(window.componentsArray.ArmBase)
         scene.add(window.componentsArray.ArmBase2)
         window.pivot1 = setPivot(window.componentsArray.ArmBase2, window.componentsArray.ArmBase3)
@@ -120,12 +124,11 @@ window.setWorld = function () {
         window.componentsArray.SubArm5.position.z += 6.5
         //Aqui se añaden las partes del brazo al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
         const gui = new GUI()
-        window.guis.armBase2 = gui.add(window.componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('ArmBase2')
-        window.guis.armBase3 = gui.add(window.pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase3')
-        window.guis.armBase4 = gui.add(window.pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Armbase4')
-        window.guis.armBase5 = gui.add(window.pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Armbase5')
-        window.guis.subArm5 = gui.add(window.pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('SubArm5')
-        window.armPosition = 1
+        window.guis.subArm5 = gui.add(window.pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Head')
+        window.guis.armBase5 = gui.add(window.pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Arm3')
+        window.guis.armBase4 = gui.add(window.pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm2')
+        window.guis.armBase3 = gui.add(window.pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm1')
+        window.guis.armBase2 = gui.add(window.componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('Base')
         loop()
     })
 }
@@ -194,4 +197,18 @@ window.goBack = function(){
     document.getElementById('controller_button').style.display = 'block'
     document.getElementById('pccontroller_button').style.display = 'block'
     document.getElementById('roomKey').style.display = 'none'
+}
+function displayList(){
+    document.getElementById('positionList').style.display = 'flex'
+    var count = 1
+    for (const item in window.componentsArray) {
+        if(item==='ArmBase2'){
+            document.getElementById('positionList').innerHTML+='<p style="color:white" class="listItem">Base<i id="arrowSelector" class="fa-solid fa-arrow-left-long"></i></p>'
+        }else if((item.includes('ArmBase') && item !== 'ArmBase')){
+            document.getElementById('positionList').innerHTML+=`<p class="listItem">Arm ${count}</p>`
+            count ++
+        }else if(item === 'SubArm5'){
+            document.getElementById('positionList').innerHTML+='<p class="listItem">Head</p>'
+        }
+    }
 }
