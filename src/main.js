@@ -211,3 +211,28 @@ function displayList(){
         }
     }
 }
+
+//Funciones para reproducir movimientos 
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function play() {
+    for (let i = 0; i < 10; i++) {
+        window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05)
+        await sleep(20);
+    }
+    console.log('Done');
+}
+
+const record = document.getElementById('record');
+
+record.addEventListener('click', function handleClick() {
+    if (record.textContent == 'Stop') {
+        record.textContent = 'Record'
+    } else {
+        record.textContent = 'Stop';
+    }
+    
+  });
