@@ -234,5 +234,4 @@ record.addEventListener('click', function handleClick() {
     } else {
         record.textContent = 'Stop';
     }
-    
-  });
+ });

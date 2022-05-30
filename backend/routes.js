@@ -5,5 +5,7 @@ const cors = require('cors')
 router.use(cors())
 //Import routers
 const queryAuthRoute = require('./controllers/AuthController')
+const queryRobotRoute = require('./controllers/RobotController')
 router.use('/auth', queryAuthRoute)
+router.use('/robot', queryRobotRoute)
 module.exports = router
