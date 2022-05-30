@@ -10,14 +10,12 @@ window.joystick = new JoyStick('joyDiv', {
     externalLineWidth: 2,
     externalStrokeColor: '#000000',
     autoReturnToCenter: true
-});
-
-const joystick = document.getElementById("joystick");
-const arrowUp = document.getElementById('arrowUp');
-const arrowDown = document.getElementById('arrowDown');
-window.armPosition = 0;
-let lastPositionStick = 0;
-
+})
+const joystick = document.getElementById("joystick")
+const arrowUp = document.getElementById('arrowUp')
+const arrowDown = document.getElementById('arrowDown')
+window.armPosition = 0
+let lastPositionStick = 0
 //Listeners al joystick y el cambio de componente para versión móvil
 joystick.addEventListener("touchmove", function () {
     moveArm(armPosition);
@@ -25,7 +23,7 @@ joystick.addEventListener("touchmove", function () {
 
 joystick.addEventListener("touchend", function () {
     lastPositionStick = 0;
-}, false);
+}, false)
 
 arrowUp.addEventListener('click', () => {
     console.log(armPosition)
@@ -33,51 +31,51 @@ arrowUp.addEventListener('click', () => {
     if (armPosition > 4) {
         armPosition = 4
     }
-    armSelected();
-});
+    armSelected()
+})
 
 arrowDown.addEventListener('click', () => {
     armPosition--
     if (armPosition < 0) {
         armPosition = 0
     }
-    armSelected();
+    armSelected()
 });
 //Funcion para mover el brazo en la version movil y para cuando quieres controlar remotamente otro robot
 function moveArm(armPosition) {
     if(!isCanRotateArm()){
-        return;
+        return
     }
     switch (armPosition) {
         case 0:
             if (window.joystick.GetDir() === 'E') {
                 if (window.remote) {
-                    socket.emit('armbase2', true);
+                    socket.emit('armbase2', true)
                 } else {
-                    window.guis.armBase2.setValue(window.guis.armBase2.object._y + 0.09);
+                    window.guis.armBase2.setValue(window.guis.armBase2.object._y + 0.09)
                 }
             }
             if (window.joystick.GetDir() === 'W') {
                 if (window.remote) {
-                    socket.emit('armbase2', false);
+                    socket.emit('armbase2', false)
                 } else {
-                    window.guis.armBase2.setValue(window.guis.armBase2.object._y - 0.09);
+                    window.guis.armBase2.setValue(window.guis.armBase2.object._y - 0.09)
                 }
             }
             break
         case 1:
             if (window.joystick.GetDir() === 'E') {
                 if (window.remote) {
-                    socket.emit('armbase3', false);
+                    socket.emit('armbase3', false)
                 } else {
-                    window.guis.armBase3.setValue(window.guis.armBase3.object._z - 0.05);
+                    window.guis.armBase3.setValue(window.guis.armBase3.object._z - 0.05)
                 }
             }
             if (window.joystick.GetDir() === 'W') {
                 if (window.remote) {
-                    socket.emit('armbase3', true);
+                    socket.emit('armbase3', true)
                 } else {
-                    window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05);
+                    window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05)
                 }
             }
             break
@@ -91,41 +89,41 @@ function moveArm(armPosition) {
             }
             if (window.joystick.GetDir() === 'W') {
                 if (window.remote) {
-                    socket.emit('armbase4', true);
+                    socket.emit('armbase4', true)
                 } else {
-                    window.guis.armBase4.setValue(window.guis.armBase4.object._z + 0.05);
+                    window.guis.armBase4.setValue(window.guis.armBase4.object._z + 0.05)
                 }
             }
             break
         case 3:
             if (window.joystick.GetDir() === 'E') {
                 if (window.remote) {
-                    socket.emit('armbase5', false);
+                    socket.emit('armbase5', false)
                 } else {
-                    window.guis.armBase5.setValue(window.guis.armBase5.object._z - 0.05);
+                    window.guis.armBase5.setValue(window.guis.armBase5.object._z - 0.05)
                 }
             }
             if (window.joystick.GetDir() === 'W') {
                 if (window.remote) {
-                    socket.emit('armbase5', true);
+                    socket.emit('armbase5', true)
                 } else {
-                    window.guis.armBase5.setValue(window.guis.armBase5.object._z + 0.05);
+                    window.guis.armBase5.setValue(window.guis.armBase5.object._z + 0.05)
                 }
             }
             break
         case 4:
             if (window.joystick.GetDir() === 'E') {
                 if (window.remote) {
-                    socket.emit('subarm5', true);
+                    socket.emit('subarm5', true)
                 } else {
-                    window.guis.subArm5.setValue(window.guis.subArm5.object._y + 0.09);
+                    window.guis.subArm5.setValue(window.guis.subArm5.object._y + 0.09)
                 }
             }
             if (window.joystick.GetDir() === 'W') {
                 if (window.remote) {
-                    socket.emit('subarm5', false);
+                    socket.emit('subarm5', false)
                 } else {
-                    window.guis.subArm5.setValue(window.guis.subArm5.object._y - 0.09);
+                    window.guis.subArm5.setValue(window.guis.subArm5.object._y - 0.09)
                 }
             }
             break
@@ -159,15 +157,12 @@ function isCanRotateArm(){
     if(window.joystick.GetDir() === 'E' && parseInt(lastPositionStick) > 100){
         lastPositionStick = 100;
     }
-
     if(window.joystick.GetDir() === 'W' && parseInt(lastPositionStick) < -100){
         lastPositionStick = -100;
     }
-
     if(window.joystick.GetDir() === 'E' && parseInt(window.joystick.GetX()) >= parseInt(lastPositionStick)){
         return true;
     }
-
     if(window.joystick.GetDir() === 'W' && parseInt(window.joystick.GetX()) <= parseInt(lastPositionStick)){
         return true;
     }
