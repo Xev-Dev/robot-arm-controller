@@ -18,26 +18,39 @@
   </head>
   <body>
     <div id="login">
-      <form action="action_page.php" method="post">
+      <div class="form">
         <div class="imgcontainer">
           <img src="https://i.imgur.com/67XFCTa.png">
         </div>
-        
           <label for="uname"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="uname" required><br>
-      
+          <input id="uname" type="text" placeholder="Enter Username" name="uname" required><br>
           <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
+          <input id="psw" type="password" placeholder="Enter Password" name="psw" required>
         <div class="container">
-          <button type="submit" id="loginbtn">Login</button>
+          <button onclick="tryLogin()" id="loginbtn">Login</button>
         </div>
-        <div class="container">
-          <button type="button" class="cancelbtn">Cancel</button>
-        </div>
-      </form> 
+        <p onclick="toggleView()">You don't have an account?</p>
+      </div> 
     </div>
-    
+    <div id="register">
+      <div class="form">
+        <div class="imgcontainer">
+          <img src="https://i.imgur.com/67XFCTa.png">
+        </div>
+          <label for="username"><b>Username</b></label>
+          <input id="username" type="text" placeholder="Enter Username" name="uname" required><br>
+          <label for="password"><b>Password</b></label>
+          <input id="password" type="password" placeholder="Enter Password" name="password" required>
+          <label for="passwordrep"><b>Repeat password</b></label>
+          <input id="passwordrep" type="password" placeholder="Repeat Password" name="passwordrep" required>
+        <div class="container">
+          <button onclick="tryRegister()" id="loginbtn">Register</button>
+        </div>
+        <p onclick="toggleView()">You have an account?</p>
+      </div> 
+    </div>
     <div id="menu">
+      <i onclick="logout()" class="logout fa-solid fa-right-from-bracket"></i>
       <div class="wrapper">
         <span class="title1">DPad</span>
         <span class="title2">Robot</span>

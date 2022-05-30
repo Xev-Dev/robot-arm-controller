@@ -33,7 +33,7 @@ button:hover{
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   background-color: #333333;
   font-size: 6rem;
 }
@@ -187,13 +187,26 @@ button:hover{
 
 /***************************************************************************************************** CSS LOGIN*/
 
-#login{
+#login,#register{
   position: absolute;
   background-color: #333333;
   width: 100%;
   height: 100%;
 }
-
+.logout{
+  position: absolute;
+  right: 1rem;
+  top:1rem;
+  font-size: 3rem;
+  color:#7693b4;
+  -o-transition: all 1s ease-out;
+  transition: all 1s ease-out; 
+  -webkit-transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+}
+.logout:hover{
+  color: #6d6d6d;
+}
 /* Full-width inputs */
 input[type=text], input[type=password] {
   width: 100%;
@@ -204,7 +217,27 @@ input[type=text], input[type=password] {
   box-sizing: border-box;
 }
 
-
+.form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+.form>input{
+  width: 50%;
+  border-radius: 10px;
+}
+.form>label,.form>p{
+  color: #ccc;
+  font-size: 1rem;
+  font-family: 'Goldman', cursive;
+ 
+}
+.form>p:hover{
+  color: #7693b4;
+  cursor: pointer;
+}
 /* Add a hover effect for buttons */
 button:hover {
   opacity: 0.8;
@@ -260,5 +293,10 @@ span.psw {
   .cancelbtn {
     width: 100%;
   }
+} 
+@media screen and (max-width: 673px) {
+    .imgcontainer>img{
+      width: 20rem;
+    }
 } 
 /***************************************************************************************************** CSS LOGIN*/

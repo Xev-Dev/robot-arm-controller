@@ -6,9 +6,8 @@ USE dpadRobot;
 CREATE TABLE IF NOT EXISTS users (
     id int(11) NOT NULL AUTO_INCREMENT,
     username varchar(50),
-    email varchar(250),
     password varchar(250),
-    PRIMARY KEY (id,email)
+    PRIMARY KEY (id,username)
 );
 
 CREATE TABLE IF NOT EXISTS record (
