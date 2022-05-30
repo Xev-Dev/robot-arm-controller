@@ -41,6 +41,7 @@ window.setWorld = function () {
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     document.getElementById('room').style.display = "block"
+    document.getElementById('record').style.display = "block"
     pl.position.set(30, 60, 40)
     const sphereSize = 1
     //Creamos un helper para saber donde se encuentra el punto de luz 
