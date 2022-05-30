@@ -10,7 +10,7 @@ router.post('/register',async(req,res)=>{
     console.log(email)
     console.log(username)
     let hashedPassword = await bcrypt.hash(password,8)
-    connection.query('INSERT INTO user SET ?',{username:username,email:email,password:hashedPassword},async(err,results)=>{
+    connection.query('INSERT INTO users SET ?',{username:username,email:email,password:hashedPassword},async(err,results)=>{
         console.log(results)
         if(err){
             console.log(err)
