@@ -140,6 +140,13 @@ button:hover{
   height: 3rem;
   font-size: 1rem;
 }
+
+#record {
+  position: absolute;
+  left: 65rem;
+  width: 14vw;
+  height: 5vw;
+}
 /* MEDIA QUERIES */
 @media (max-width: 812px) {
   button{
