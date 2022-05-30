@@ -211,3 +211,15 @@ function displayList(){
         }
     }
 }
+
+// function sleep(ms) {
+//     return new Promise(resolve => setTimeout(resolve, ms));
+// }
+
+// async function play(params) {
+//     for (var i = 0; i < 9; i++) {
+//         window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05)
+//         await sleep(1)
+//     }
+    
+// }
