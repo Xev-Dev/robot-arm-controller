@@ -355,7 +355,7 @@ window.startRecord = async function () {
     }
 }
 async function getRecord(){
-    const getRecord = await fetch(`${backend}/robot/getRecord/${window.logged}`,{
+    const getRecord = await fetch(`${backend}/robot/getRecord`,{
         headers:{"Content-Type":"application/json"},
         method:"GET",
     })
