@@ -367,7 +367,7 @@ function resetRecordList(){
 }
 function setRecordList(){
     window.records.forEach((el,index) => {
-        document.getElementById('recordList').innerHTML+=`<p class="record">Record ${el.id}</p>`
+        document.getElementById('recordList').innerHTML+=`<p onclick="play(${el.id})"  class="record">Record ${el.id}</p>`
         if(index===window.records.length - 1){
             window.lastRecord = el.id
         }
@@ -378,30 +378,56 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-window.play = async function () {
-    for (let i = 0; i < window.movement.length; i++) {
-        switch (window.movement[i][0]) {
-            case "armBase2":
-                window.guis.armBase2.setValue(window.guis.armBase2.object._y + window.movement[i][1])
-                break;
-            case "armBase3":
-                window.guis.armBase3.setValue(window.guis.armBase3.object._z + window.movement[i][1])
-                break;
-            case "armBase4":
-                window.guis.armBase4.setValue(window.guis.armBase4.object._z + window.movement[i][1])
-                break;
-            case "armBase5":
-                window.guis.armBase5.setValue(window.guis.armBase5.object._z + window.movement[i][1])
-                break;
-            case "subArm5":
-                window.guis.subArm5.setValue(window.guis.subArm5.object._y + window.movement[i][1])
-                break;
-            default:
-                break;
+window.play = async function (id) {
+    console.log(id)
+    const getPosition = await fetch(`${backend}/robot/getPosition/${id}`,{
+        headers:{'Content-Type':'application/json'},
+        method:'GET'
+    })
+    const getPositionJson = await getPosition.json()
+    if(getPositionJson.error){
+        console.log('failed to fetch movements')
+    }else{
+            console.log(getPositionJson)
+            window.guis.armBase2.object._y = parseInt(getPositionJson.base)
+            window.guis.armBase3.object._z = parseInt(getPositionJson.arm1)
+            window.guis.armBase4.object._z = parseInt(getPositionJson.arm2)
+            window.guis.armBase5.object._z = parseInt(getPositionJson.arm3)
+            window.guis.subArm5.object._y = parseInt(getPositionJson.head)
+            const getMovements = await fetch(`${backend}/robot/getMovements/${id}`,{
+                headers:{'Content-Type':'application/json'},
+                method:'GET'
+            })
+            const getMovementsJson = await getMovements.json()
+            if(getMovementsJson.error){
+                console.log('failed to fetch position')
+        }else{
+            console.log(getMovementsJson)
+            for (let i = 0; i < getMovementsJson.length; i++) {
+                switch (getMovementsJson[i].arm){
+                    case "base":
+                        window.guis.armBase2.setValue(window.guis.armBase2.object._y + getMovementsJson[i].radians)
+                        break;
+                    case "arm1":
+                        window.guis.armBase3.setValue(window.guis.armBase3.object._z + getMovementsJson[i].radians)
+                        break;
+                    case "arm2":
+                        window.guis.armBase4.setValue(window.guis.armBase4.object._z + getMovementsJson[i].radians)
+                        break;
+                    case "arm3":
+                        window.guis.armBase5.setValue(window.guis.armBase5.object._z + getMovementsJson[i].radians)
+                        break;
+                    case "head":
+                        window.guis.subArm5.setValue(window.guis.subArm5.object._y + getMovementsJson[i].radians)
+                        break;
+                    default:
+                        break;
+                }
+            await sleep(5)
         }
-        await sleep(5)
+        console.log('Done');
     }
-    console.log('Done');
+    }
 }
 
 const record = document.getElementById('record');

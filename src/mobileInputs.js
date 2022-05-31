@@ -1,4 +1,6 @@
 import {socket} from '../helpers/socketConf'
+const backend = 'http://localhost:3600'
+
 //Creamos el componente joystick
 window.joystick = new JoyStick('joyDiv', {
     title: 'joystick',
@@ -11,6 +13,7 @@ window.joystick = new JoyStick('joyDiv', {
     externalStrokeColor: '#000000',
     autoReturnToCenter: true
 })
+
 const joystick = document.getElementById("joystick")
 const arrowUp = document.getElementById('arrowUp')
 const arrowDown = document.getElementById('arrowDown')
@@ -42,7 +45,7 @@ arrowDown.addEventListener('click', () => {
     armSelected()
 });
 //Funcion para mover el brazo en la version movil y para cuando quieres controlar remotamente otro robot
-function moveArm(armPosition) {
+async function moveArm(armPosition) {
     if(!isCanRotateArm()){
         return
     }
@@ -53,6 +56,9 @@ function moveArm(armPosition) {
                     socket.emit('armbase2', true)
                 } else {
                     window.guis.armBase2.setValue(window.guis.armBase2.object._y + 0.09)
+                    if(window.record){
+                        await registerMovement('base',0.09)
+                    } 
                 }
             }
             if (window.joystick.GetDir() === 'W') {
@@ -60,6 +66,9 @@ function moveArm(armPosition) {
                     socket.emit('armbase2', false)
                 } else {
                     window.guis.armBase2.setValue(window.guis.armBase2.object._y - 0.09)
+                    if(window.record){
+                        await registerMovement('base',-0.09)
+                    }
                 }
             }
             break
@@ -69,6 +78,9 @@ function moveArm(armPosition) {
                     socket.emit('armbase3', false)
                 } else {
                     window.guis.armBase3.setValue(window.guis.armBase3.object._z - 0.05)
+                    if(window.record){
+                        await registerMovement('arm1',-0.05)
+                    }
                 }
             }
             if (window.joystick.GetDir() === 'W') {
@@ -76,6 +88,9 @@ function moveArm(armPosition) {
                     socket.emit('armbase3', true)
                 } else {
                     window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05)
+                    if(window.record){
+                        await registerMovement('arm1',0.05)
+                    }
                 }
             }
             break
@@ -85,6 +100,9 @@ function moveArm(armPosition) {
                     socket.emit('armbase4', false);
                 } else {
                     window.guis.armBase4.setValue(window.guis.armBase4.object._z - 0.05);
+                    if(window.record){
+                        await registerMovement('arm2',-0.05) 
+                    }
                 }
             }
             if (window.joystick.GetDir() === 'W') {
@@ -92,6 +110,9 @@ function moveArm(armPosition) {
                     socket.emit('armbase4', true)
                 } else {
                     window.guis.armBase4.setValue(window.guis.armBase4.object._z + 0.05)
+                    if(window.record){
+                        await registerMovement('arm2',0.05)
+                    }
                 }
             }
             break
@@ -101,6 +122,9 @@ function moveArm(armPosition) {
                     socket.emit('armbase5', false)
                 } else {
                     window.guis.armBase5.setValue(window.guis.armBase5.object._z - 0.05)
+                    if(window.record){
+                        await registerMovement('arm3',-0.05)
+                    }
                 }
             }
             if (window.joystick.GetDir() === 'W') {
@@ -108,6 +132,9 @@ function moveArm(armPosition) {
                     socket.emit('armbase5', true)
                 } else {
                     window.guis.armBase5.setValue(window.guis.armBase5.object._z + 0.05)
+                    if(window.record){
+                        await registerMovement('arm3',0.05)
+                    }
                 }
             }
             break
@@ -117,6 +144,9 @@ function moveArm(armPosition) {
                     socket.emit('subarm5', true)
                 } else {
                     window.guis.subArm5.setValue(window.guis.subArm5.object._y + 0.09)
+                    if(window.record){
+                        await registerMovement('head',0.09)
+                    }
                 }
             }
             if (window.joystick.GetDir() === 'W') {
@@ -124,6 +154,10 @@ function moveArm(armPosition) {
                     socket.emit('subarm5', false)
                 } else {
                     window.guis.subArm5.setValue(window.guis.subArm5.object._y - 0.09)
+                    if(window.record){
+                        await registerMovement('head',-0.09)
+                    }
+
                 }
             }
             break
@@ -167,4 +201,18 @@ function isCanRotateArm(){
         return true;
     }
     return false;
+}
+async function registerMovement(arm,radians){
+    let form = {
+        'id_record':window.lastRecord,
+        'arm':arm,
+        'radians':radians
+    }
+    const postMovement = await fetch(`${backend}/robot/registerMovement`,{
+        headers:{"Content-Type":"application/json"},
+        method:"POST",
+        body:JSON.stringify(form)
+    })
+    const postMovementJson = await postMovement.json()
+    console.log(postMovementJson)
 }

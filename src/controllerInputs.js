@@ -57,20 +57,6 @@ window.addEventListener('gc.button.hold', function (event) {
             break
     }
 }, false)
-async function registerMovement(arm,radians){
-    let form {
-        id_record:window.lastRecord
-        id_record:window.lastRecord
-        id_record:window.lastRecord
-    }
-    const postMovement = await fetch(`${backend}/robot/registerMovement`,{
-        headers:{"Content-Type":"application/json"},
-        method:"POST",
-        body:JSON.stringify(form)
-    })
-    const postMovementJson = await postMovement.json()
-    console.log(postMovementJson)
-}
 // Funcion que detecta los joysticks
 window.addEventListener('gc.analog.hold', function (event) {
     var stick = event.detail

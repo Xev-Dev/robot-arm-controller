@@ -9,10 +9,10 @@ router.post('/registerMovement',async(req,res)=>{
         console.log(results)
         if(err){
             console.log(err)
-            res.status(500).send('error')
+            res.status(500).json('error')
         }else{
             console.log(results)
-            res.status(200).send('movement registered succesfully')
+            res.status(200).json('movement registered succesfully')
         }    
     })
 })
@@ -47,22 +47,22 @@ router.post('/registerRecord',async(req,res)=>{
         }    
     })
 })
-router.get('/getMove/:idRecord',async(req,res)=>{
-    connection.query(`SELECT * FROM movement WHERE id_record = ${req.params.idRecord}`, async(error,results)=>{
+router.get('/getMovements/:idRecord',async(req,res)=>{
+    console.log(req.params)
+    connection.query(`SELECT * FROM movement WHERE id_record = ?`,[parseInt(req.params.idRecord)], async(error,results)=>{
         if(error){
             console.log(error)
-            res.status(500).send('movement not found')
+            res.status(500).json({'error':error})
         }else{
-            console.log(results)
             res.status(200).json(results)
         }
     })
 })
 router.get('/getPosition/:idRecord',async(req,res)=>{
-    connection.query(`SELECT * FROM position WHERE id_record = ${req.params.idRecord}`, async(error,results)=>{
+    connection.query(`SELECT * FROM position WHERE id_record = ?`,[parseInt(req.params.idRecord)], async(error,results)=>{
         if(error){
             console.log(error)
-            res.status(500).send('position not found')
+            res.status(500).json({'error':error})
         }else{
             console.log(results)
             res.status(200).json(results)
