@@ -12,6 +12,7 @@ window.boxHelper = null
 window.robotActivePart = null
 window.gui = null
 window.hideGui = false
+window.recordId 
 window.guis = {
     'armBase2': undefined,
     'armBase3': undefined,
@@ -26,11 +27,12 @@ window.pivot3 = null
 window.pivot4 = null
 window.mobile = false
 window.login = true
-window.logged = localStorage.getItem('logged')
+window.logged = (JSON.parse(localStorage.getItem('logged'))).id
 window.record = false
 window.change = undefined
 window.movement = []
 window.positions = []
+window.records = []
 //Constantes
 const lookX = 0
 const lookY = 35
@@ -52,9 +54,14 @@ if(window.logged){
     document.getElementById('menu').style.display = "none"
     document.getElementById('register').style.display='none'
 }
+
+    
 //FUNCIONES BOTONES DOM
 ////Funcion que renderiza el mundo 3d, prepara el escenario y el modelo 
-window.setWorld = function () {
+window.setWorld = async function () {
+    await getRecord()
+    resetRecordList()
+    setRecordList()
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     document.getElementById('room').style.display = "block"
@@ -157,7 +164,6 @@ window.setWorld = function () {
         loop()
     })
 }
-
 //Funcion para ocultar los botones y mostrar el formulario para el modo remoto
 window.hiddenButtons = function () {
     document.getElementById('controller_button').style.display = 'none'
@@ -235,9 +241,10 @@ window.tryLogin = async function(){
     })
     const json = await res.json()
     if(json.logged){
-        localStorage.setItem('logged','true')
+        localStorage.setItem('logged',JSON.stringify(json.logged))
         document.getElementById('login').style.display = 'none'
         document.getElementById('menu').style.display = 'flex'
+        window.logged = (JSON.parse(localStorage.getItem('logged'))).id
     }else{
         console.log('failed to login')
     }   
@@ -305,7 +312,7 @@ function displayList(){
         }
     }
 }
-window.startRecord = function () {
+window.startRecord = async function () {
     if (window.record) {
         window.record = false
         console.log("Grabacion detenida");
@@ -314,11 +321,39 @@ window.startRecord = function () {
     } else{
         window.record = true;
         console.log("Grabacion empezada");
+        const postRecord = await fetch(`${backend}/robot/registerRecord`,{
+            headers:{"Content-Type":"application/json"},
+            method:"POST",
+            body:localStorage.getItem('logged')
+        })
+        const postRecordJson = await postRecord.json()
+        if(postRecordJson.error){
+            console.log(postRecordJson.error)
+        }else{
+            console.log('new record registered succesfully')
+            await getRecord()
+            resetRecordList()
+            setRecordList()
+        }
         window.positions=[window.guis.armBase2.object._y,window.guis.armBase3.object._z,,window.guis.armBase4.object._z,window.guis.armBase5.object._z,window.guis.subArm5.object._y];
-        
     }
 }
-
+async function getRecord(){
+    const getRecord = await fetch(`${backend}/robot/getRecord/${window.logged}`,{
+        headers:{"Content-Type":"application/json"},
+        method:"GET",
+    })
+    window.records = await getRecord.json()
+    console.log(window.records)
+}
+function resetRecordList(){
+    document.getElementById('recordList').innerHTML=''
+}
+function setRecordList(){
+    window.records.forEach(el => {
+        document.getElementById('recordList').innerHTML+=`<p class="record">Record ${el.id}</p>`
+    })
+}
 //Funciones para reproducir movimientos 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -358,4 +393,4 @@ record.addEventListener('click', function handleClick() {
     } else {
         record.textContent = 'Stop';
     }
- });
+})
