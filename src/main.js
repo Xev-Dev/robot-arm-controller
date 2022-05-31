@@ -11,6 +11,7 @@ window.componentsArray = {}
 window.boxHelper = null
 window.robotActivePart = null
 window.gui = null
+window.hideGui = false
 window.guis = {
     'armBase2': undefined,
     'armBase3': undefined,
@@ -56,7 +57,6 @@ window.setWorld = function () {
     document.getElementById('record').style.display = "block"
     document.getElementById('menu').style.display = 'none'
     document.getElementById('back').style.display = 'block'
-
     pl.position.set(30, 60, 40)
     const sphereSize = 1
     //Creamos un helper para saber donde se encuentra el punto de luz 
@@ -138,15 +138,22 @@ window.setWorld = function () {
         //-2.8, 2.8
         window.componentsArray.SubArm5.position.z += 6.5
         //Aqui se añaden las partes del brazo al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
-        window.gui = new GUI()
-        window.guis.subArm5 = window.gui.add(window.pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Head')
-        window.guis.armBase5 = window.gui.add(window.pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Arm3')
-        window.guis.armBase4 = window.gui.add(window.pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm2')
-        window.guis.armBase3 = window.gui.add(window.pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm1')
-        window.guis.armBase2 = window.gui.add(window.componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('Base')
+        if(!window.hideGui){
+            window.gui = new GUI()
+            window.guis.subArm5 = window.gui.add(window.pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Head')
+            window.guis.armBase5 = window.gui.add(window.pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Arm3')
+            window.guis.armBase4 = window.gui.add(window.pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm2')
+            window.guis.armBase3 = window.gui.add(window.pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm1')
+            window.guis.armBase2 = window.gui.add(window.componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('Base')  
+            if(window.mobile){
+                GUI.toggleHide();
+                window.hideGui = true
+            }    
+        }
         loop()
     })
 }
+
 //Funcion para ocultar los botones y mostrar el formulario para el modo remoto
 window.hiddenButtons = function () {
     document.getElementById('controller_button').style.display = 'none'
@@ -257,6 +264,8 @@ window.backToMenu = function(){
     document.getElementById('controlls-container').style.display = 'none'
     document.getElementById('record').style.display = 'none'
     document.getElementById('back').style.display = 'none'
+    document.getElementById('positionList').innerHTML = '';
+    window.armPosition = 0
     window.gui.destroy()
 }
 window.tryRegister = async function(){

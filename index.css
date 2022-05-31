@@ -101,7 +101,7 @@ button:hover{
 #positionList{
   display:none;
   position: absolute;
-  top:2.5rem;
+  top:3rem;
   left:1rem;
   font-family: 'Goldman', cursive;
   font-size: 1.5rem;
@@ -197,7 +197,7 @@ button:hover{
   position: absolute;
   right: 1rem;
   top:1rem;
-  font-size: 3rem;
+  font-size: 2rem;
   color:#7693b4;
   -o-transition: all 1s ease-out;
   transition: all 1s ease-out; 
@@ -209,7 +209,7 @@ button:hover{
     left: 1rem;
     top: 1rem;
     display: none;
-    font-size: 3rem;
+    font-size: 2rem;
     color:#6d6d6d;
     -o-transition: all 1s ease-out;
     transition: all 1s ease-out; 
