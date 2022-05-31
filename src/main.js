@@ -23,10 +23,14 @@ window.pivot2 = null
 window.pivot3 = null
 window.pivot4 = null
 window.mobile = false
+window.login = true
+window.logged = localStorage.getItem('logged')
 //Constantes
 const lookX = 0
 const lookY = 35
 const lookZ = 0
+const backend = 'http://localhost:3600'
+console.log(logged)
 //Handle mobile device or pc device
 if("ontouchstart" in document.documentElement){
     window.mobile = true
@@ -35,12 +39,20 @@ if("ontouchstart" in document.documentElement){
     window.mobile = false
     document.getElementById('pccontroller_button').style.display = "none"
 }
+if(window.logged){
+    document.getElementById('login').style.display = "none"
+    document.getElementById('register').style.display='none'
+}else{
+    document.getElementById('menu').style.display = "none"
+    document.getElementById('register').style.display='none'
+}
 //FUNCIONES BOTONES DOM
 ////Funcion que renderiza el mundo 3d, prepara el escenario y el modelo 
 window.setWorld = function () {
     //Creamos punto de luz 
     var pl = new THREE.PointLight(0xffffff)
     document.getElementById('room').style.display = "block"
+    document.getElementById('record').style.display = "block"
     pl.position.set(30, 60, 40)
     const sphereSize = 1
     //Creamos un helper para saber donde se encuentra el punto de luz 
@@ -82,7 +94,6 @@ window.setWorld = function () {
     var renderer = new THREE.WebGLRenderer({ antialias: true })
     window.render = renderer
     //Handle initial window size 
-    document.getElementById('menu').style.display = "none"
     onWindowSize()
     //Listener para controlar el resize
     window.addEventListener('resize', onWindowSize, false)
@@ -197,6 +208,62 @@ window.goBack = function(){
     document.getElementById('pccontroller_button').style.display = 'block'
     document.getElementById('roomKey').style.display = 'none'
 }
+window.tryLogin = async function(){
+    const form = {
+        username:document.getElementById('uname').value,
+        password:document.getElementById('psw').value
+    }
+    const res = await fetch(`${backend}/auth/login`,{
+        headers:{"Content-Type": "application/json"},
+        body:JSON.stringify(form),
+        method:'POST'
+    })
+    const json = await res.json()
+    if(json.logged){
+        localStorage.setItem('logged','true')
+        document.getElementById('login').style.display = 'none'
+        document.getElementById('menu').style.display = 'flex'
+    }else{
+        console.log('failed to login')
+    }   
+}
+window.logout = function(){
+    localStorage.removeItem('logged')
+    document.getElementById('menu').style.display = 'none'
+    document.getElementById('login').style.display = 'block'
+}
+window.toggleView = function(){
+    console.log(window.login)
+    if(window.login){
+        document.getElementById('login').style.display='none'
+        document.getElementById('register').style.display='block'
+        window.login = false
+    }else{
+        document.getElementById('register').style.display='none'
+        document.getElementById('login').style.display='block'
+        window.login = true
+    }
+}
+window.tryRegister = async function(){
+    const form = {
+        username:document.getElementById('username').value,
+        password:document.getElementById('password').value,
+        password_confirmation:document.getElementById('passwordrep').value
+    }
+    const res = await fetch(`${backend}/auth/register`,{
+        headers:{"Content-Type": "application/json"},
+        body:JSON.stringify(form),
+        method:'POST'
+    })
+    const json = await res.json()
+    if(json.registered){
+        console.log('registered!')
+        window.toggleView()
+    }else{
+        console.log('failed to register')
+    }   
+
+}
 function displayList(){
     document.getElementById('positionList').style.display = 'flex'
     var count = 1
@@ -211,15 +278,24 @@ function displayList(){
         }
     }
 }
+//Funciones para reproducir movimientos 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function play() {
+    for (let i = 0; i < 10; i++) {
+        window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05)
+        await sleep(20);
+    }
+    console.log('Done');
+}
 
-// function sleep(ms) {
-//     return new Promise(resolve => setTimeout(resolve, ms));
-// }
+const record = document.getElementById('record');
 
-// async function play(params) {
-//     for (var i = 0; i < 9; i++) {
-//         window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05)
-//         await sleep(1)
-//     }
-    
-// }
+record.addEventListener('click', function handleClick() {
+    if (record.textContent == 'Stop') {
+        record.textContent = 'Record'
+    } else {
+        record.textContent = 'Stop';
+    }
+ });

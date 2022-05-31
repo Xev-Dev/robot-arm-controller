@@ -1,4 +1,3 @@
-import { Socket } from 'socket.io-client'
 import {socket} from '../helpers/socketConf'
 socket.on('setRoom',(room)=>{
     window.room = room
