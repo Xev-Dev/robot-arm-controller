@@ -1,5 +1,4 @@
 const express = require('express')
-const { async } = require('regenerator-runtime')
 const router = express.Router()
 const connection = require('../db.js')
 router.post('/registerMovement',async(req,res)=>{
@@ -36,15 +35,15 @@ router.post('/registerPosition',async(req,res)=>{
     })
 })
 router.post('/registerRecord',async(req,res)=>{
-    const user = req.body.idUser
+    let user = req.body.id
     connection.query('INSERT INTO record SET ?', {user}, async(err,results)=>{
         console.log(results)
         if(err){
             console.log(err)
-            res.status(500).send('error')
+            res.status(500).json({'error':err})
         }else{
             console.log(results)
-            res.status(200).send('record registered succesfully')
+            res.status(200).json({'error':false})
         }    
     })
 })
@@ -74,7 +73,7 @@ router.get('/getRecord/:idUser',async(req,res)=>{
     connection.query(`SELECT * FROM record WHERE user = ${req.params.idUser}`, async(error,results)=>{
         if(error){
             console.log(error)
-            res.status(500).send('record not found')
+            res.status(500).json({'error':error})
         }else{
             console.log(results)
             res.status(200).json(results)

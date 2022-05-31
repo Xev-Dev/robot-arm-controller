@@ -45,7 +45,7 @@ router.post('/login',async(req,res)=>{
                     res.status(404).json({'logged':false})
                 }else{
                      console.log(results)
-                    res.status(200).json({'logged':true})
+                    res.status(200).json({'logged':results[0]})
                 }
              }
          })
