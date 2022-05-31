@@ -10,6 +10,7 @@ window.remote = false
 window.componentsArray = {}
 window.boxHelper = null
 window.robotActivePart = null
+window.gui = null
 window.guis = {
     'armBase2': undefined,
     'armBase3': undefined,
@@ -53,6 +54,9 @@ window.setWorld = function () {
     var pl = new THREE.PointLight(0xffffff)
     document.getElementById('room').style.display = "block"
     document.getElementById('record').style.display = "block"
+    document.getElementById('menu').style.display = 'none'
+    document.getElementById('back').style.display = 'block'
+
     pl.position.set(30, 60, 40)
     const sphereSize = 1
     //Creamos un helper para saber donde se encuentra el punto de luz 
@@ -134,12 +138,12 @@ window.setWorld = function () {
         //-2.8, 2.8
         window.componentsArray.SubArm5.position.z += 6.5
         //Aqui se añaden las partes del brazo al gui y se establecen las direcciones de sus movimientos y limitaciones a la hora de girar
-        const gui = new GUI()
-        window.guis.subArm5 = gui.add(window.pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Head')
-        window.guis.armBase5 = gui.add(window.pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Arm3')
-        window.guis.armBase4 = gui.add(window.pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm2')
-        window.guis.armBase3 = gui.add(window.pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm1')
-        window.guis.armBase2 = gui.add(window.componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('Base')
+        window.gui = new GUI()
+        window.guis.subArm5 = window.gui.add(window.pivot4.rotation, 'y', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Head')
+        window.guis.armBase5 = window.gui.add(window.pivot3.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) - 0.3).name('Arm3')
+        window.guis.armBase4 = window.gui.add(window.pivot2.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm2')
+        window.guis.armBase3 = window.gui.add(window.pivot1.rotation, 'z', (Math.PI * 2 * -1) / 2 + 0.3, (Math.PI * 2) / 2 - 0.3).name('Arm1')
+        window.guis.armBase2 = window.gui.add(window.componentsArray.ArmBase2.rotation, 'y', (Math.PI * 2 * -1), (Math.PI * 2)).name('Base')
         loop()
     })
 }
@@ -244,6 +248,17 @@ window.toggleView = function(){
         window.login = true
     }
 }
+window.backToMenu = function(){
+    document.getElementById('menu').style.display = 'flex'
+    document.getElementById('mobileArrows').style.display = 'none'
+    document.getElementById('joyDiv').style.display = 'none'
+    document.getElementById('mobileBackground').style.display = 'none'
+    document.getElementById('roomKey').style.display = 'none'
+    document.getElementById('controlls-container').style.display = 'none'
+    document.getElementById('record').style.display = 'none'
+    document.getElementById('back').style.display = 'none'
+    window.gui.destroy()
+}
 window.tryRegister = async function(){
     const form = {
         username:document.getElementById('username').value,
@@ -262,7 +277,6 @@ window.tryRegister = async function(){
     }else{
         console.log('failed to register')
     }   
-
 }
 function displayList(){
     document.getElementById('positionList').style.display = 'flex'

@@ -204,6 +204,18 @@ button:hover{
   -webkit-transition: all 1s ease-out;
   -moz-transition: all 1s ease-out;
 }
+#back{
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    display: none;
+    font-size: 3rem;
+    color:#6d6d6d;
+    -o-transition: all 1s ease-out;
+    transition: all 1s ease-out; 
+    -webkit-transition: all 1s ease-out;
+    -moz-transition: all 1s ease-out;
+}
 .logout:hover{
   color: #6d6d6d;
 }
