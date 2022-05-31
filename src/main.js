@@ -389,11 +389,12 @@ window.play = async function (id) {
         console.log('failed to fetch movements')
     }else{
             console.log(getPositionJson)
-            window.guis.armBase2.object._y = parseInt(getPositionJson.base)
-            window.guis.armBase3.object._z = parseInt(getPositionJson.arm1)
-            window.guis.armBase4.object._z = parseInt(getPositionJson.arm2)
-            window.guis.armBase5.object._z = parseInt(getPositionJson.arm3)
-            window.guis.subArm5.object._y = parseInt(getPositionJson.head)
+            console.log(window.guis.armBase2.object._y)
+            window.guis.armBase2.setValue(getPositionJson[0].base)
+            window.guis.armBase3.setValue(getPositionJson[0].arm1)
+            window.guis.armBase4.setValue(getPositionJson[0].arm2)
+            window.guis.armBase5.setValue(getPositionJson[0].arm3)
+            window.guis.subArm5.setValue(getPositionJson[0].head)
             const getMovements = await fetch(`${backend}/robot/getMovements/${id}`,{
                 headers:{'Content-Type':'application/json'},
                 method:'GET'
@@ -402,31 +403,31 @@ window.play = async function (id) {
             if(getMovementsJson.error){
                 console.log('failed to fetch position')
         }else{
-            console.log(getMovementsJson)
-            for (let i = 0; i < getMovementsJson.length; i++) {
-                switch (getMovementsJson[i].arm){
-                    case "base":
-                        window.guis.armBase2.setValue(window.guis.armBase2.object._y + getMovementsJson[i].radians)
-                        break;
-                    case "arm1":
-                        window.guis.armBase3.setValue(window.guis.armBase3.object._z + getMovementsJson[i].radians)
-                        break;
-                    case "arm2":
-                        window.guis.armBase4.setValue(window.guis.armBase4.object._z + getMovementsJson[i].radians)
-                        break;
-                    case "arm3":
-                        window.guis.armBase5.setValue(window.guis.armBase5.object._z + getMovementsJson[i].radians)
-                        break;
-                    case "head":
-                        window.guis.subArm5.setValue(window.guis.subArm5.object._y + getMovementsJson[i].radians)
-                        break;
-                    default:
-                        break;
-                }
-            await sleep(5)
+            // console.log(getMovementsJson)
+            // for (let i = 0; i < getMovementsJson.length; i++) {
+            //     switch (getMovementsJson[i].arm){
+            //         case "base":
+            //             window.guis.armBase2.setValue(window.guis.armBase2.object._y + getMovementsJson[i].radians)
+            //             break;
+            //         case "arm1":
+            //             window.guis.armBase3.setValue(window.guis.armBase3.object._z + getMovementsJson[i].radians)
+            //             break;
+            //         case "arm2":
+            //             window.guis.armBase4.setValue(window.guis.armBase4.object._z + getMovementsJson[i].radians)
+            //             break;
+            //         case "arm3":
+            //             window.guis.armBase5.setValue(window.guis.armBase5.object._z + getMovementsJson[i].radians)
+            //             break;
+            //         case "head":
+            //             window.guis.subArm5.setValue(window.guis.subArm5.object._y + getMovementsJson[i].radians)
+            //             break;
+            //         default:
+            //             break;
+            //     }
+            // await sleep(5)
+        
         }
-        console.log('Done');
-    }
+        console.log('Done');   
     }
 }
 
