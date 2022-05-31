@@ -27,10 +27,10 @@ router.post('/registerPosition',async(req,res)=>{
         console.log(results)
         if(err){
             console.log(err)
-            res.status(500).send('error')
+            res.status(500).json({'error':err})
         }else{
             console.log(results)
-            res.status(200).send('position registered succesfully')
+            res.status(200).json({'error':false})
         }    
     })
 })
