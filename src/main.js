@@ -153,7 +153,6 @@ window.setWorld = function () {
         loop()
     })
 }
-
 //Funcion para ocultar los botones y mostrar el formulario para el modo remoto
 window.hiddenButtons = function () {
     document.getElementById('controller_button').style.display = 'none'
