@@ -13,14 +13,14 @@ window.addEventListener('gc.button.hold', function (event) {
         case "LEFT_SHOULDER":
             window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05)
             if (window.record) {
-                window.change = ["armbase3", 0.05]
+                window.change = ["armBase3", 0.05]
                 window.movement.push(window.change)
             }
             break
         case "RIGHT_SHOULDER":
             window.guis.armBase3.setValue(window.guis.armBase3.object._z - 0.05)
             if (window.record) {
-                window.change = ["armbase3", -0.05]
+                window.change = ["armBase3", -0.05]
                 window.movement.push(window.change)
             }
             break
