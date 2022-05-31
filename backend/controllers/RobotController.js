@@ -9,10 +9,10 @@ router.post('/registerMovement',async(req,res)=>{
         console.log(results)
         if(err){
             console.log(err)
-            res.status(500).send('error')
+            res.status(500).json('error')
         }else{
             console.log(results)
-            res.status(200).send('movement registered succesfully')
+            res.status(200).json('movement registered succesfully')
         }    
     })
 })

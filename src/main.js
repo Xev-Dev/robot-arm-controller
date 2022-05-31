@@ -381,19 +381,19 @@ function sleep(ms) {
 window.play = async function () {
     for (let i = 0; i < window.movement.length; i++) {
         switch (window.movement[i][0]) {
-            case "armBase2":
+            case "base":
                 window.guis.armBase2.setValue(window.guis.armBase2.object._y + window.movement[i][1])
                 break;
-            case "armBase3":
+            case "arm1":
                 window.guis.armBase3.setValue(window.guis.armBase3.object._z + window.movement[i][1])
                 break;
-            case "armBase4":
+            case "arm2":
                 window.guis.armBase4.setValue(window.guis.armBase4.object._z + window.movement[i][1])
                 break;
-            case "armBase5":
+            case "arm3":
                 window.guis.armBase5.setValue(window.guis.armBase5.object._z + window.movement[i][1])
                 break;
-            case "subArm5":
+            case "head":
                 window.guis.subArm5.setValue(window.guis.subArm5.object._y + window.movement[i][1])
                 break;
             default:
