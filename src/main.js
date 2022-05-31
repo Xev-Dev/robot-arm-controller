@@ -13,6 +13,7 @@ window.robotActivePart = null
 window.gui = null
 window.hideGui = false
 window.recordId 
+window.lastRecord 
 window.guis = {
     'armBase2': undefined,
     'armBase3': undefined,
@@ -334,8 +335,23 @@ window.startRecord = async function () {
             await getRecord()
             resetRecordList()
             setRecordList()
+            console.log(window.lastRecord)
         }
-        window.positions=[window.guis.armBase2.object._y,window.guis.armBase3.object._z,,window.guis.armBase4.object._z,window.guis.armBase5.object._z,window.guis.subArm5.object._y];
+        window.positions={
+            'base':window.guis.armBase2.object._y,
+            'arm1':window.guis.armBase3.object._z,
+            'arm2':window.guis.armBase4.object._z,
+            'arm3':window.guis.armBase5.object._z,
+            'head':window.guis.subArm5.object._y,
+            'id_record':window.lastRecord
+        }
+        const postPosition = await fetch(`${backend}/robot/registerPosition`,{
+            headers:{"Content-Type":"application/json"},
+            method:"POST",
+            body:JSON.stringify(window.positions)
+        })
+        const postPositionJson = await postPosition.json()
+        console.log(postPositionJson)
     }
 }
 async function getRecord(){
@@ -350,8 +366,11 @@ function resetRecordList(){
     document.getElementById('recordList').innerHTML=''
 }
 function setRecordList(){
-    window.records.forEach(el => {
+    window.records.forEach((el,index) => {
         document.getElementById('recordList').innerHTML+=`<p class="record">Record ${el.id}</p>`
+        if(index===window.records.length - 1){
+            window.lastRecord = el.id
+        }
     })
 }
 //Funciones para reproducir movimientos 
