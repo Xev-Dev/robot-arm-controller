@@ -27,6 +27,10 @@ window.pivot4 = null
 window.mobile = false
 window.login = true
 window.logged = localStorage.getItem('logged')
+window.record = false
+window.change = undefined
+window.movement = []
+window.positions = []
 //Constantes
 const lookX = 0
 const lookY = 35
@@ -300,6 +304,20 @@ function displayList(){
         }
     }
 }
+window.startRecord = function () {
+    if (window.record) {
+        window.record = false
+        console.log("Grabacion detenida");
+        console.log(window.movement);
+        console.log(window.positions);
+    } else{
+        window.record = true;
+        console.log("Grabacion empezada");
+        window.positions=[window.guis.armBase2.object._y,window.guis.armBase3.object._z,,window.guis.armBase4.object._z,window.guis.armBase5.object._z,window.guis.subArm5.object._y];
+        
+    }
+}
+
 //Funciones para reproducir movimientos 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
