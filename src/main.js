@@ -323,10 +323,29 @@ window.startRecord = function () {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-async function play() {
-    for (let i = 0; i < 10; i++) {
-        window.guis.armBase3.setValue(window.guis.armBase3.object._z + 0.05)
-        await sleep(20);
+
+window.play = async function () {
+    for (let i = 0; i < window.movement.length; i++) {
+        switch (window.movement[i][0]) {
+            case "armBase2":
+                window.guis.armBase2.setValue(window.guis.armBase2.object._y + window.movement[i][1])
+                break;
+            case "armBase3":
+                window.guis.armBase3.setValue(window.guis.armBase3.object._z + window.movement[i][1])
+                break;
+            case "armBase4":
+                window.guis.armBase4.setValue(window.guis.armBase4.object._z + window.movement[i][1])
+                break;
+            case "armBase5":
+                window.guis.armBase5.setValue(window.guis.armBase5.object._z + window.movement[i][1])
+                break;
+            case "subArm5":
+                window.guis.subArm5.setValue(window.guis.subArm5.object._y + window.movement[i][1])
+                break;
+            default:
+                break;
+        }
+        await sleep(5)
     }
     console.log('Done');
 }
