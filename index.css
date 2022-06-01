@@ -110,7 +110,7 @@ button:hover{
   display: none;
   position: absolute;
   top:1rem;
-  left: 1rem;
+  left: 5rem;
   color: white;
   text-shadow: 1px 1px 5px black;
   font-family: 'Goldman', cursive;
@@ -161,9 +161,11 @@ button:hover{
 #record {
   display: none;
   position: absolute;
-  left: 65rem;
   width: 14vw;
   height: 5vw;
+  top: 8%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 /* MEDIA QUERIES */
 @media (max-width: 926px) {
@@ -171,8 +173,21 @@ button:hover{
     height: 5rem;
   }
   #record{
-    left: 20rem;
-    font-size: 16px;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+  }
+  #recordList{
+    position: absolute;
+    height: 15rem;
+    width: 5rem;
+    color: white;
+    text-shadow: 1px 1px 5px black;
+    overflow-x: scroll;
+    top:0;
+    right:0;
+    left: auto;
   }
 }
 @media (max-width: 716px) {
@@ -186,6 +201,14 @@ button:hover{
   }
   button{
     width: 20rem;
+  }
+  #record{
+    width: 26vw;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    height: 10vw;
   }
 }
 @media (max-width: 400px) {
