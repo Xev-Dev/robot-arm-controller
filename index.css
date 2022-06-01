@@ -110,7 +110,7 @@ button:hover{
   display: none;
   position: absolute;
   top:1rem;
-  left: 1rem;
+  left: 5rem;
   color: white;
   text-shadow: 1px 1px 5px black;
   font-family: 'Goldman', cursive;
