@@ -178,6 +178,17 @@ button:hover{
     transform: translate(-50%, -50%);
     font-size: 20px;
   }
+  #recordList{
+    position: absolute;
+    height: 15rem;
+    width: 5rem;
+    color: white;
+    text-shadow: 1px 1px 5px black;
+    overflow-x: scroll;
+    top:0;
+    right:0;
+    left: auto;
+  }
 }
 @media (max-width: 716px) {
   #menu{
