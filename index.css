@@ -161,9 +161,11 @@ button:hover{
 #record {
   display: none;
   position: absolute;
-  left: 65rem;
   width: 14vw;
   height: 5vw;
+  top: 8%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 /* MEDIA QUERIES */
 @media (max-width: 926px) {
@@ -171,8 +173,10 @@ button:hover{
     height: 5rem;
   }
   #record{
-    left: 20rem;
-    font-size: 16px;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
   }
 }
 @media (max-width: 716px) {
@@ -186,6 +190,14 @@ button:hover{
   }
   button{
     width: 20rem;
+  }
+  #record{
+    width: 26vw;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    height: 10vw;
   }
 }
 @media (max-width: 400px) {
