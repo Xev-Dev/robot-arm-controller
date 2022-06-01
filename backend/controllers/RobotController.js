@@ -70,7 +70,9 @@ router.get('/getPosition/:idRecord',async(req,res)=>{
     })
 })
 router.get('/getRecord',async(req,res)=>{
-    connection.query(`SELECT * FROM record`, async(error,results)=>{
+    connection.query(`SELECT record.id, users.username
+    FROM record
+    INNER JOIN users ON users.id=record.user`, async(error,results)=>{
         if(error){
             console.log(error)
             res.status(500).json({'error':error})

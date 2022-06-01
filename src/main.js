@@ -28,7 +28,11 @@ window.pivot3 = null
 window.pivot4 = null
 window.mobile = false
 window.login = true
-window.logged = (JSON.parse(localStorage.getItem('logged'))).id
+if(localStorage.getItem('logged')){
+    window.logged = (JSON.parse(localStorage.getItem('logged'))).id
+}else{
+    window.logged = undefined
+}
 window.record = false
 window.change = undefined
 window.movement = []
@@ -39,7 +43,6 @@ const lookX = 0
 const lookY = 35
 const lookZ = 0
 const backend = 'http://localhost:3600'
-console.log(logged)
 //Handle mobile device or pc device
 if("ontouchstart" in document.documentElement){
     window.mobile = true
@@ -55,8 +58,6 @@ if(window.logged){
     document.getElementById('menu').style.display = "none"
     document.getElementById('register').style.display='none'
 }
-
-    
 //FUNCIONES BOTONES DOM
 ////Funcion que renderiza el mundo 3d, prepara el escenario y el modelo 
 window.setWorld = async function () {
@@ -216,7 +217,6 @@ function getRobotItems(object_group, componentsArray) {
         var temp_componentsArray = []
         if (item.type == "Group" && !item.name.includes("ur10")) {
             // item.material = material;
-            // console.log(item);
             componentsArray[item.name] = item
             temp_componentsArray = getRobotItems(item, componentsArray)
         }
@@ -256,7 +256,6 @@ window.logout = function(){
     document.getElementById('login').style.display = 'block'
 }
 window.toggleView = function(){
-    console.log(window.login)
     if(window.login){
         document.getElementById('login').style.display='none'
         document.getElementById('register').style.display='block'
@@ -317,8 +316,6 @@ window.startRecord = async function () {
     if (window.record) {
         window.record = false
         console.log("Grabacion detenida");
-        console.log(window.movement);
-        console.log(window.positions);
     } else{
         window.record = true;
         console.log("Grabacion empezada");
@@ -335,7 +332,6 @@ window.startRecord = async function () {
             await getRecord()
             resetRecordList()
             setRecordList()
-            console.log(window.lastRecord)
         }
         window.positions={
             'base':window.guis.armBase2.object._y,
@@ -351,7 +347,6 @@ window.startRecord = async function () {
             body:JSON.stringify(window.positions)
         })
         const postPositionJson = await postPosition.json()
-        console.log(postPositionJson)
     }
 }
 async function getRecord(){
@@ -360,14 +355,13 @@ async function getRecord(){
         method:"GET",
     })
     window.records = await getRecord.json()
-    console.log(window.records)
 }
 function resetRecordList(){
     document.getElementById('recordList').innerHTML=''
 }
 function setRecordList(){
     window.records.forEach((el,index) => {
-        document.getElementById('recordList').innerHTML+=`<p onclick="play(${el.id})"  class="record">Record ${el.id}</p>`
+        document.getElementById('recordList').innerHTML+=`<p onclick="play(${el.id})"  class="record">Record ${el.id} by ${el.username}</p>`
         if(index===window.records.length - 1){
             window.lastRecord = el.id
         }
@@ -377,9 +371,7 @@ function setRecordList(){
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 window.play = async function (id) {
-    console.log(id)
     const getPosition = await fetch(`${backend}/robot/getPosition/${id}`,{
         headers:{'Content-Type':'application/json'},
         method:'GET'
@@ -388,8 +380,6 @@ window.play = async function (id) {
     if(getPositionJson.error){
         console.log('failed to fetch movements')
     }else{
-            console.log(getPositionJson)
-            console.log(window.guis.armBase2.object._y)
             window.guis.armBase2.setValue(parseFloat(getPositionJson[0].base))
             window.guis.armBase3.setValue(parseFloat(getPositionJson[0].arm1))
             window.guis.armBase4.setValue(parseFloat(getPositionJson[0].arm2))
@@ -403,12 +393,7 @@ window.play = async function (id) {
             if(getMovementsJson.error){
                 console.log('failed to fetch position')
             }else{
-                console.log(getMovementsJson)
                 for (let i = 0; i < getMovementsJson.length; i++) {
-                    console.log(getMovementsJson[i].arm)
-                    console.log(getMovementsJson[i].radians)
-                    console.log(parseFloat(getMovementsJson[i].radians))
-                    console.log(window.guis.armBase2.object._y )
                     switch (getMovementsJson[i].arm){
                         case "base":
                             window.guis.armBase2.setValue(window.guis.armBase2.object._y + parseFloat(getMovementsJson[i].radians))
@@ -434,9 +419,7 @@ window.play = async function (id) {
         console.log('Done');   
     }
 }
-
 const record = document.getElementById('record');
-
 record.addEventListener('click', function handleClick() {
     if (record.textContent == 'Stop') {
         record.textContent = 'Record'
