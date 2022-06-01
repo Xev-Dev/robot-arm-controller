@@ -180,7 +180,7 @@ button:hover{
   }
   #recordList{
     position: absolute;
-    height: 15rem;
+    height: 10rem;
     width: 5rem;
     color: white;
     text-shadow: 1px 1px 5px black;

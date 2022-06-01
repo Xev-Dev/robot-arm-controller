@@ -276,6 +276,7 @@ window.backToMenu = function(){
     document.getElementById('record').style.display = 'none'
     document.getElementById('back').style.display = 'none'
     document.getElementById('positionList').innerHTML = '';
+    document.getElementById('recordList').style.display = 'none';
     window.armPosition = 0
     window.gui.destroy()
 }
